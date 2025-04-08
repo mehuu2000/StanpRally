@@ -89,7 +89,7 @@ git checkout develop  #developブランチに移動
 ```
 
 ```sh
-git marge --squash future/〇〇  #developブランチにfuture/〇〇の変更を追加
+git merge --squash future/〇〇  #developブランチにfuture/〇〇の変更を追加
 ```
 
 ```sh
@@ -119,3 +119,33 @@ git stash pop  #一時保存の変更を反映
 で、できます
 
 ⚠️ **注意:** mainに直接pushしないでください。developを用意しているのでそれを編集し、push, fetch, margeしてください
+
+----
+
+### 変更を取り込むとき
+
+```sh
+git add .
+```
+
+```sh
+git commit "一時保存"  #避難している感じで分かればいい
+```
+
+```sh
+git push origin future/〇〇  #変更を加えたブランチを避難
+```
+
+```sh
+git fetch origin 〇〇  #他の人がpushしたブランチ
+```
+
+```sh
+git diff --name-status 自分のブランチ名 origin/取り込むブランチ名  #差分が簡単に見れる
+```
+
+```sh
+git merge origin/取り込むブランチ名  #変更を取り込む
+```
+
+コンフリクトが起こるかもなので、起きたら頑張りましょう
