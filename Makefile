@@ -6,10 +6,10 @@ build:  #キャッシュを使わないビルド,起動はしない
 	docker-compose -f docker-compose.yml build --no-cache
 
 up:  #セットアップや既存イメージの再ビルド
-	docker ompose -f docker-compose.yml up -d
+	docker compose -f docker-compose.yml up -d
 
 down:  #コンテナ削除
-	docker ompose down --remove-orphans
+	docker compose down --remove-orphans
 
 start:  #コンテナの起動
 	docker compose -f docker-compose.yml start
