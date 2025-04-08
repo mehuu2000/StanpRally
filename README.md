@@ -18,12 +18,26 @@
 
 ### 初回セットアップ
 
+任意のブランチで
+
+```sh
+git clone https://github.com/mehuu2000/StanpRally.git
+```
+
+プロジェクトディレクトリに移動
+
+```sh
+npm ci
+```
+
+.envを設定
+
 ```sh
 make init
 ```
 
 ```sh
-make [mack, win, linux]-app
+make [mack, win, linux]-app  #各自のOSで[]内を変えてください
 ```
 
 これでブラウザが開かれるので確認してください
