@@ -1,0 +1,12 @@
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+      - "5555:5555"
+    volumes:
+      - ./:/app
+    environment:
+      - NODE_ENV=development
