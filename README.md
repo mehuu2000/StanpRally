@@ -27,10 +27,8 @@ make [mack, win, linux]-app
 **developから**
 
 ```sh
-git checkout -b future/〇〇
+git checkout -b future/〇〇  #新しいブランチを作成
 ```
-
-として新しいブランチを作成してから編集してください
 
 #### 編集が終わると
 
@@ -47,19 +45,19 @@ git puch origin future/〇〇
 ```
 
 ```sh
-git checkout develop
+git checkout develop  #developブランチに移動
 ```
 
 ```sh
-git marge --squash future/〇〇
+git marge --squash future/〇〇  #developブランチにfuture/〇〇の変更を追加
 ```
 
 ```sh
-git commit -m "⬜︎⬜︎"
+git commit -m "⬜︎⬜︎"  #追加した変更にコメントを設定
 ```
 
 ```sh
-git push origin develop
+git push origin develop  #developに適応
 ```
 
 するのがいいかなと思います。
