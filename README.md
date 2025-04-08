@@ -102,4 +102,20 @@ git push origin develop  #developに適応
 
 するのがいいかなと思います。
 
+#### もしmainやdevelopで開発しちゃった！といった時は
+
+```sh
+git stash  #変更を一時保存
+```
+
+```sh
+git checkout -b future/〇〇  #変更を置くブランチを作成&移動
+```
+
+```sh
+git stash pop  #一時保存の変更を反映
+```
+
+で、できます
+
 ⚠️ **注意:** mainに直接pushしないでください。developを用意しているのでそれを編集し、push, fetch, margeしてください

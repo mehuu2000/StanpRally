@@ -1,11 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -14,20 +9,23 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(uuid())
+  id             Int    @id @default(autoincrement())
+  publicId       String    @default(uuid()) @unique
   email          String    @unique
   hashedPassword String
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
-
-  sessions      Session[]
+  
+  stamps         Stamps?
 }
 
-model Session {
-  id           String    @id @default(uuid())
-  sessionToken String    @unique
-  userId       String
-  expires      DateTime
-
-  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Stamps {
+  userId Int   @id
+  stamp1 Boolean? @default(false)
+  stamp2 Boolean? @default(false)
+  stamp3 Boolean? @default(false)
+  stamp4 Boolean? @default(false)
+  stamp5 Boolean? @default(false)
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  updatedAt DateTime @updatedAt
 }

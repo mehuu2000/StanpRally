@@ -8,5 +8,6 @@ services:
       - "5555:5555"
     volumes:
       - ./:/app
+      - /app/node_modules
     environment:
       - NODE_ENV=development
