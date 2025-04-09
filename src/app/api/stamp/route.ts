@@ -28,9 +28,14 @@ const stampPoints: Record<number, { lat: number, lng: number }> = {
 
 //フロントから取得する情報　lat,lng,stampId lat,lngはからでもよい
 
-export async function POST(req: Request) {
+export async function GET(req: Request) {
+        // export async function GET() {
     try {
         const { lat, lng, stampId } = await req.json()
+        // const stampId = 1
+        // const lng = 0
+        // const lat = 0
+        
         const session = await getServerSession(authOptions)
         if (!session || !session.user?.publicId) {
             return new Response("Unauthorized", { status: 401 })
@@ -97,6 +102,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ message: "Stamp collected (no location)", inner: false })
         }
     } catch (err) {
+        console.error(err)
         return Response.json({ message: "Unauthorized", status: 401 })
     }
 }
