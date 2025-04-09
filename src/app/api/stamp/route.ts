@@ -26,6 +26,8 @@ const stampPoints: Record<number, { lat: number, lng: number }> = {
     5: { lat: 34.823500, lng: 135.521900 }
 }
 
+//フロントから取得する情報　lat,lng,stampId lat,lngはからでもよい
+
 export async function POST(req: Request) {
     try {
         const { lat, lng, stampId } = await req.json()
@@ -65,7 +67,7 @@ export async function POST(req: Request) {
         const point = stampPoints[stampId]
         if (!point) return new Response("Stamp point not found", { status: 404 })
 
-        let updateData: Record<string, boolean> = {
+        const updateData: Record<string, boolean> = {
             [stampField]: true,
         }
 
@@ -94,8 +96,7 @@ export async function POST(req: Request) {
 
         return NextResponse.json({ message: "Stamp collected (no location)", inner: false })
         }
-    } catch (err: any) {
-        console.error("Stamp API Error:", err)
-        return new Response("Unauthorized", { status: 401 })
+    } catch (err) {
+        return Response.json({ message: "Unauthorized", status: 401 })
     }
 }

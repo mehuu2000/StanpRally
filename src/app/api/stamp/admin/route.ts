@@ -11,16 +11,18 @@ export async function GET() {
         const users = await client.user.findMany({
             include: { stamps: true }
         })
-    
+
+        if(users.length === 0){
+        return NextResponse.json({ message: "No users found", data: [] })
+        }
         const data = users.map((user: User & { stamps: Stamps | null }) => ({
             userId: user.id,
             email: user.email,
             ...(user.stamps ?? {})
         }))
     
-        return NextResponse.json({ data })
+        return NextResponse.json({ data ,status:200})
     } catch (err) {
-        console.error("API Error in /api/stamp/admin:", err)
         return new Response("Internal Server Error", { status: 500 })
     }
 }

@@ -28,7 +28,7 @@ export default function AdminStampPage() {
       <table className="table-auto border w-full text-sm">
         <thead>
           <tr>
-            <th className="border px-2 py-1">User</th>
+            <th className="border px-2 py-1">UserId</th>
             {[1, 2, 3, 4, 5].map(i => (
               <th key={i} className="border px-2 py-1">Stamp{i}</th>
             ))}

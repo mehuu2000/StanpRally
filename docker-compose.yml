@@ -11,3 +11,4 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
+      # - DATABASE_URL=postgresql://postgres.zofzcekhhzrlujxmprcw:Ka5+bwIXdbSwUMovu7KHO9MVlyB5Wn2xgsW95WiUGqg=@aws-0-ap-northeast-1.pooler.supabase.com:5432/postgres
