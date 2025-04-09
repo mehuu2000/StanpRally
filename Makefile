@@ -70,6 +70,6 @@ linux-prisma:
 	docker-compose exec app npx prisma studio
 
 win-app:  #WindowsOSの場合はこれでブラウザが開く
-	start http://localhost:3000
+	/mnt/c/Windows/System32/cmd.exe /c start http://localhost:3000/
 win-prisma:
 	docker-compose exec app npx prisma studio
