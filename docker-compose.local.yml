@@ -1,0 +1,31 @@
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+      - "5555:5555"
+    volumes:
+      - ./:/app
+    environment:
+      - NODE_ENV=development
+      - NEXTAUTH_SECRET=7GLrKVb1X6lzKgnfdogjrJqZrA8UD98Be1KNJcehgjk=
+      - NEXTAUTH_URL=http://localhost:3000
+      - Local_DATABASE_URL=postgres://postgres:postgres@db:5432/nextjs_auth
+    depends_on:
+      - db
+      
+  db:
+    image: postgres:16
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nextjs_auth
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  
+volumes:
+  db_data:

@@ -1,5 +1,5 @@
 # 開発用 Dockerfile.dev
-FROM node:20.18.3
+FROM node:20.19.0-slim
 
 # 作業ディレクトリを作成
 WORKDIR /app

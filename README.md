@@ -3,6 +3,7 @@
 - 初回セットアップ
 - ライブラリの追加
 - 新しい要素を追加する(コードを書く)場合
+- 環境について
 
 ----
 
@@ -149,3 +150,38 @@ git merge origin/取り込むブランチ名  #変更を取り込む
 ```
 
 コンフリクトが起こるかもなので、起きたら頑張りましょう
+
+----
+
+### 環境について
+今回大学のwifiではsupabaseに通信できません。また、supabaseもリソースに制限があるため、ローカルでも動くように環境を二つ作りました。
+
+本番に近い通信
+
+```
+next.js(docekr) + supabase
+```
+
+起動方法などは普通のmakeコマンド
+
+開発用の環境
+
+```
+next.js(docekr) + postgreSQL(docker)
+```
+
+起動方法などはまず、project/prisma/schema.prismaのurlをLocal_DATABASE_URLに切り替えておく
+
+今まで使ってきたmakeコマンドの一番後ろに```-local```をつけ環境を起動
+
+
+初回は
+
+```sh
+npx prisma migrate dev --name init
+```
+
+とすること
+
+
+

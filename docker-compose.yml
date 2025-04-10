@@ -12,4 +12,3 @@ services:
       - NODE_ENV=development
       - NEXTAUTH_SECRET=7GLrKVb1X6lzKgnfdogjrJqZrA8UD98Be1KNJcehgjk=
       - NEXTAUTH_URL=http://localhost:3000
-      
