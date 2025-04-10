@@ -11,7 +11,7 @@ import { z } from 'zod';
 * これらをフロントから受け取る
 */
 
-const signupValideate = z.object({
+const loginValideate = z.object({
     email: z.string()
         .email('有効なメールアドレスを入力してください')
         .refine(
@@ -25,12 +25,10 @@ const signupValideate = z.object({
     password: z.string().min(6, 'パスワードは6文字以上である必要があります'),
 });
 
-const HASHCOUNT = 10;
-
 export async function POST(req: NextRequest) {
     const body = await req.json();
 
-    const result = signupValideate.safeParse(body);
+    const result = loginValideate.safeParse(body);
     if(!result.success) {
         return NextResponse.json({ message: 'バリデーションエラー ', error: result.error.errors}, {status: 400});
     }
@@ -44,22 +42,19 @@ export async function POST(req: NextRequest) {
         },
     });
 
-    if (existingUser) {
-        return NextResponse.json({ message: 'この名前もしくはメールアドレスは既に使用されています' }, { status: 400 });
+    if (!existingUser) {
+        return NextResponse.json({ message: 'ユーザーが見つかりません' }, { status: 400 });
     }
 
-    // パスワードをハッシュ化
-    const hashedPassword = await bcrypt.hash(password, HASHCOUNT);
+    // 既存ユーザーのハッシュパスワードと作ったパスワードを比較
+    const isValidPassword = await bcrypt.compare(password, existingUser.hashedPassword);
 
-    // 新しいユーザーを作成
-    const user = await prisma.user.create({
-        data: {
-            email,
-            hashedPassword,
-        },
-    });
+    if(!isValidPassword) {
+        return NextResponse.json({ message: 'パスワードが間違っています' }, { status: 400 });
+    }
+    
 
-    console.log('ユーザー登録が成功しました', user);
+    console.log('ログインが成功しました');
 
-    return NextResponse.json({ message: 'ユーザー登録が成功しました', user }, { status: 201 });
+    return NextResponse.json({ message: 'ログインが成功しました' }, { status: 201 });
 }
