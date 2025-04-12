@@ -49,6 +49,7 @@ function LoginComponent({ form, handleChange }: LoginProps) {
     return (
         <form onSubmit={handleSubmit}>
             {error && <div className={styles.error}>{error}</div>}
+            <label htmlFor="email">メールアドレス</label>
             <input 
                 type="email" 
                 name="email"
@@ -56,6 +57,7 @@ function LoginComponent({ form, handleChange }: LoginProps) {
                 value={form.email}
                 onChange={handleChange}
             />
+            <label htmlFor="password">パスワード</label>
             <input 
                 type="password"
                 name="password"

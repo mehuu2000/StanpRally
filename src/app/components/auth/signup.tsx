@@ -6,6 +6,7 @@ import styles from '@/app/statics/styles/auth/auth.module.css';
 
 interface LoginProps {
     form: {
+      name: string;
       email: string;
       password: string;
     };
@@ -33,6 +34,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: LoginProps) {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
+                name: form.name,
                 email: form.email,
                 password: form.password,
               }),
@@ -83,6 +85,14 @@ function SignUpComponent({ form, handleChange, setAuthType }: LoginProps) {
                 name="password"
                 className={styles.input}
                 value={form.password}
+                onChange={handleChange}
+            />
+            <label htmlFor="name">名前</label>
+            <input
+                type="text"
+                name="name"
+                className={styles.input}
+                value={form.name}
                 onChange={handleChange}
             />
             <button type="submit" disabled={isLoading}>

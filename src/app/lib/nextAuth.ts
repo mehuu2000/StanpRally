@@ -7,6 +7,7 @@ declare module "next-auth" {
     interface Session {
         user: {
             publicId: string;
+            name: string;
             email: string;
         };
     }
@@ -14,12 +15,14 @@ declare module "next-auth" {
     interface User {
         id: number;
         publicId : string;
+        name?: string;
         email: string;
     }
   
     interface JWT {
         id: number;
         publicId: string;
+        name: string;
         email: string;
     }
 }
@@ -51,6 +54,7 @@ export const authOptions: NextAuthOptions = {
                         return {
                             id: user.id,
                             publicId: user.publicId,
+                            name: user.name,
                             email: user.email,
                         }
                     } else {
@@ -64,8 +68,8 @@ export const authOptions: NextAuthOptions = {
         }),
     ],
     pages: {
-        signIn: '/signIn',
-        error: '/signIn',
+        signIn: '/auth',
+        error: '/auth',
     },
     session: {
         strategy: "jwt",
@@ -76,6 +80,7 @@ export const authOptions: NextAuthOptions = {
             if (user) {
                 token.id = user.id;
                 token.publicId = user.publicId;
+                token.name = user.name;
                 token.email = user.email;
             }
             return token;
@@ -84,6 +89,7 @@ export const authOptions: NextAuthOptions = {
             if (token) {
                 session.user = {
                     publicId: token.publicId as string,
+                    name: token.name as string,
                     email: token.email as string,
                 };
             }
