@@ -1,32 +1,38 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
 }
 
 datasource db {
   provider = "postgresql"
-  // url      = env("DATABASE_URL")
-  url      = env("Local_DATABASE_URL")
+  url      = env("DATABASE_URL")
+  // url      = env("Local_DATABASE_URL")
 }
 
 model User {
-  id             Int    @id @default(autoincrement())
-  publicId       String    @default(uuid()) @unique
-  email          String    @unique
+  id             Int      @id @default(autoincrement())
+  publicId       String   @unique @default(uuid())
+  name           String    @unique
+  email          String   @unique
   hashedPassword String
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
   stamps         Stamps?
 }
 
 model Stamps {
-  userId Int   @id
-  stamp1 Boolean? @default(false)
-  stamp2 Boolean? @default(false)
-  stamp3 Boolean? @default(false)
-  stamp4 Boolean? @default(false)
-  stamp5 Boolean? @default(false)
-  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    Int      @id
+  stamp1    Boolean? @default(false)
+  stamp2    Boolean? @default(false)
+  stamp3    Boolean? @default(false)
+  stamp4    Boolean? @default(false)
+  stamp5    Boolean? @default(false)
+  inner1    Boolean  @default(false)
+  inner2    Boolean  @default(false)
+  inner3    Boolean  @default(false)
+  inner4    Boolean  @default(false)
+  inner5    Boolean  @default(false)
   updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+

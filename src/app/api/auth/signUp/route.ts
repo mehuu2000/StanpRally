@@ -4,7 +4,8 @@ import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 
 /*
-*
+* 
+* name: 名前
 * email: メールアドレス
 * passWord: パスワード
 * 
@@ -12,6 +13,7 @@ import { z } from 'zod';
 */
 
 const signupValideate = z.object({
+    name: z.string().min(3, '名前は2文字以上である必要があります'),
     email: z.string()
         .email('有効なメールアドレスを入力してください')
         .refine(
@@ -35,12 +37,16 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: 'バリデーションエラー ', error: result.error.errors}, {status: 400});
     }
 
-    const { email, password } = result.data;
+    const { name, email, password } = result.data;
 
     // 既存のユーザーをチェック
     const existingUser = await prisma.user.findFirst({
-        where: {
-            email,
+        where: 
+            {
+                OR: [
+                    { email },
+                    { name },
+                ],
         },
     });
 
@@ -54,6 +60,7 @@ export async function POST(req: NextRequest) {
     // 新しいユーザーを作成
     const user = await prisma.user.create({
         data: {
+            name,
             email,
             hashedPassword,
         },

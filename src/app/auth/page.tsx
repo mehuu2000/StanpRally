@@ -8,6 +8,7 @@ import SignUpComponent from '@/app/components/auth/signup';
 
 export default function AuthPage() {
     const [form, setForm] = useState({
+        name: '',
         email: '',
         password: '',
     });
