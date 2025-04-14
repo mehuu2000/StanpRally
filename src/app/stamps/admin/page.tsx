@@ -1,13 +1,15 @@
-// app/stamps/admin/page.tsx
-
 'use client'
 
 import { useEffect, useState } from "react"
-
 import { Stamps } from "@prisma/client"
 
 export default function AdminStampPage() {
-  const [data, setData] = useState<Stamps[]>([])
+  type StampWithEmail = {
+    userId: number
+    email: string
+    stamps: Stamps
+  }
+  const [data, setData] = useState<StampWithEmail[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -28,6 +30,7 @@ export default function AdminStampPage() {
       <table className="table-auto border w-full text-sm">
         <thead>
           <tr>
+            <th className="border px-2 py-1">Email</th> {/* Emailの列を追加 */}
             <th className="border px-2 py-1">UserId</th>
             {[1, 2, 3, 4, 5].map(i => (
               <th key={i} className="border px-2 py-1">Stamp{i}</th>
@@ -40,15 +43,18 @@ export default function AdminStampPage() {
         <tbody>
           {data.map(user => (
             <tr key={user.userId}>
+              <td className="border text-center">
+                {user.email} {/* user.email にアクセス */}
+              </td>
               <td className="border px-2 py-1">{user.userId}</td>
               {[1, 2, 3, 4, 5].map(i => (
                 <td key={`s${i}`} className="border text-center">
-                  {user[`stamp${i}` as keyof Stamps] ? '✅' : ''}
+                  {user[`stamp${i}` as keyof StampWithEmail] ? '✅' : ''}
                 </td>
               ))}
               {[1, 2, 3, 4, 5].map(i => (
                 <td key={`in${i}`} className="border text-center">
-                  {user[`inner${i}` as keyof Stamps] ? '✅' : ''}
+                  {user[`inner${i}` as keyof StampWithEmail] ? '✅' : ''}
                 </td>
               ))}
             </tr>

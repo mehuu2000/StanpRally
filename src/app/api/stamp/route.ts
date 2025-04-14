@@ -28,7 +28,7 @@ const stampPoints: Record<number, { lat: number, lng: number }> = {
 
 //フロントから取得する情報　lat,lng,stampId lat,lngはからでもよい
 
-export async function GET(req: Request) {
+export async function POST(req: Request) {
         // export async function GET() {
     try {
         const { lat, lng, stampId } = await req.json()
