@@ -32,8 +32,8 @@ model Stamps {
   inner3    Boolean  @default(false)
   inner4    Boolean  @default(false)
   inner5    Boolean  @default(false)
+  count Int @default(0)
   updatedAt DateTime @updatedAt
-  count     Int?     @default(0) @db.SmallInt
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
