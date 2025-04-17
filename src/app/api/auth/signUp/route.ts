@@ -26,8 +26,8 @@ const signupValideate = z.object({
         ),
     password: z.string().min(6, 'パスワードは6文字以上である必要があります'),
     visitorId: z.string(),
-    cookieUUID: z.string().optional(),
-    newCookieUUID: z.string().optional(),
+    cookieUUID: z.string().nullable().optional(),
+    newCookieUUID: z.string().nullable().optional(),
 });
 
 const HASHCOUNT = 10;
@@ -136,3 +136,19 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: 'ユーザー登録中にエラーが発生しました' }, { status: 500 });
     }
 }
+
+/*
+・visitorIdが登録されていない & cookieUUIDが登録されていない
+->新規作成
+・visitorIdが登録されていない & cookieUUIDが登録されている
+->作成を制限
+・visitorIdが登録されていない & cookieUUIDがない
+->新規作成
+
+・visitorIdが登録されている & cookieUUIDが登録されていない
+->新規作成(visitorIdの重複でのエラー防止) counterで制限
+・visitorIdが登録されている & cookieUUIDが登録されている
+->作成を制限
+・visitorIdが登録されている & cookieUUIDがない
+->作成を制限 counterで制限
+*/

@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 type User = {
   name: string | null;
@@ -11,6 +12,7 @@ type User = {
 export default function TopPage() {
     const { data: session } = useSession();
     const [ currentUser, setCurrentUser ] = useState<User | null>(null);
+    const router = useRouter();
 
     useEffect(() => {
         if(session) {
@@ -25,11 +27,14 @@ export default function TopPage() {
                   <p>Welcome, {currentUser.name}</p>
                   <p>Your email, {currentUser.email}</p>
                   <p>Your userId, {currentUser.publicId}</p>
+                  <button onClick={() => router.push('/auth')}>認証ページへ</button>
               </div>
             ) : (
+              <div>
                 <p>ログインしてください</p>
+                <button onClick={() => router.push('/auth')}>認証ページへ</button>
+              </div>
             )}
-
         </div>
     );
 }
