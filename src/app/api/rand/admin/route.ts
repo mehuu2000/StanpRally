@@ -31,7 +31,6 @@ export async function GET() {
             userId: entry.user.id,
             email: entry.user.email,
           }))
-          
         return NextResponse.json({ data ,status:200})
     } catch (err) {
         console.error(err)

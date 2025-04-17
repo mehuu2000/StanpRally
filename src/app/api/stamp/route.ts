@@ -24,11 +24,11 @@ const stampPoints: Record<number, { lat: number, lng: number, password: number}>
     5: { lat: 34.823500, lng: 135.521900 , password: 5}
 }
 
-//フロントから取得する情報　lat,lng,stampId,password ※lat,lngはnullでもよい
+//フロントから取得する情報　lat,lng,stampId,password,frontPublicId ※lat,lngはnullでもよい
 
 export async function POST(req: Request) {
     try {
-        const { lat, lng, stampId,password } = await req.json()
+        const { lat, lng, stampId,password,frontPublicId } = await req.json()
         
         const session = await getServerSession(authOptions)
         
@@ -36,6 +36,9 @@ export async function POST(req: Request) {
             return NextResponse.json({ message: "Unauthorized", status: 401 })
         }
         const publicId = session.user.publicId
+        if(publicId!=frontPublicId){
+            return NextResponse.json({ message: "Unauthorized", status: 401 })
+        }
 
         // 有効なstampIdかチェック
         if (![1, 2, 3, 4, 5].includes(stampId)) {
