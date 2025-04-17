@@ -34,7 +34,7 @@ export async function GET() {
                 .filter(Boolean).length
 
             // 倍率を計算（例：0→1, 1→1.25, 2→1.5, ...）
-            const weight = 1 + trueCount * 0.25
+            const weight = 1 + trueCount * 0.1
 
             // weight に応じて user を複製
             return Array(Math.round(weight)).fill(user)
