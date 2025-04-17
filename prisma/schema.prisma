@@ -36,3 +36,21 @@ model Stamps {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model DeviceControl {
+  id          Int     @id @default(autoincrement())
+  visitorId   String  @unique
+  counter     Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  cookies     CookieUUID[]
+}
+model CookieUUID {
+  id              Int     @id @default(autoincrement())
+  cookieUUID      String  @unique
+  deviceControlId Int
+  createdAt       DateTime @default(now())
+
+  deviceControl  DeviceControl @relation(fields: [deviceControlId], references: [id], onDelete: Cascade)
+}
+
