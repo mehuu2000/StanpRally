@@ -68,6 +68,8 @@ export async function POST(req: NextRequest) {
 
     // トランザクションを使用して、ユーザーと CookieUUID を同時に登録
     try {
+        let errorMessage = null;
+
         const createdUser = await prisma.$transaction(async (tx) => {
             let canRegister = false;
             let deviceControlId: number | null = null;
@@ -90,12 +92,14 @@ export async function POST(req: NextRequest) {
                     canRegister = true;
                     deviceControlId = deviceControl.id;
                 } else {
-                    return NextResponse.json({ message: 'このデバイスではこれ以上アカウントを作成できません' }, { status: 403 });
+                    errorMessage = 'このデバイスではこれ以上アカウントを作成できません';
+                    return null;
                 }
             }
 
             if (!canRegister || (!cookieUUID && !newCookieUUID)) {
-                return NextResponse.json({ message: '登録条件を満たしていません' }, { status: 403 });
+                errorMessage = '登録条件を満たしていません';
+                return null;
             }
 
             // パスワードをハッシュ化
@@ -126,6 +130,14 @@ export async function POST(req: NextRequest) {
             }
             return user;
         });
+
+        if (errorMessage) {
+            return NextResponse.json({ message: errorMessage }, { status: 403 });
+        }
+        
+        if (!result) {
+            return NextResponse.json({ message: '登録に失敗しました' }, { status: 400 });
+        }
 
         console.log('ユーザー登録が成功しました', createdUser);
 
