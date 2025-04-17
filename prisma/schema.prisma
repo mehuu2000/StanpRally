@@ -12,7 +12,7 @@ datasource db {
 model User {
   id             Int      @id @default(autoincrement())
   publicId       String   @unique @default(uuid())
-  name           String    @unique
+  name           String   @unique
   email          String   @unique
   hashedPassword String
   createdAt      DateTime @default(now())
@@ -33,6 +33,28 @@ model Stamps {
   inner4    Boolean  @default(false)
   inner5    Boolean  @default(false)
   updatedAt DateTime @updatedAt
+  count     Int?     @default(0) @db.SmallInt
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model DeviceControl {
+  id        Int          @id @default(autoincrement())
+  visitorId String       @unique
+  counter   Int          @default(0)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  cookies   CookieUUID[]
+}
+
+model CookieUUID {
+  id              Int           @id @default(autoincrement())
+  cookieUUID      String        @unique
+  deviceControlId Int
+  createdAt       DateTime      @default(now())
+  deviceControl   DeviceControl @relation(fields: [deviceControlId], references: [id], onDelete: Cascade)
+}
+
+
+
+
 
