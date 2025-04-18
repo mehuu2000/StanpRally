@@ -28,7 +28,7 @@ export async function GET() {
         return NextResponse.json({ message: "No users found", data: [] })
         }
         const data = users.map((entry) => ({
-            userId: entry.user.id,
+            userId: entry.user.publicId,
             email: entry.user.email,
           }))
         return NextResponse.json({ data ,status:200})

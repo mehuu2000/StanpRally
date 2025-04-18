@@ -2,6 +2,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../lib/nextAuth";
 import prisma from "@/app/lib/prisma";
 
+export const dynamic = 'force-dynamic'
+
 // ログインユーザー取得
 const getCurrentUser = async () => {
     'use server';
