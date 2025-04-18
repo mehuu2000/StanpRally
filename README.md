@@ -175,10 +175,15 @@ next.js(docekr) + postgreSQL(docker)
 今まで使ってきたmakeコマンドの一番後ろに```-local```をつけ環境を起動
 
 
-初回は
+prisma/migrationsがない場合は
 
 ```sh
 npx prisma migrate dev --name init
+```
+
+ある場合は
+```sh
+npx prisma migrate deploy
 ```
 
 とすること
