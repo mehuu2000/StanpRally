@@ -4,7 +4,11 @@ import React from 'react'
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import styles from '@/app/statics/styles/auth/auth.module.css';
+import { TextField, Button, InputAdornment, IconButton, Alert, Box, CircularProgress } from '@mui/material';
+import EmailIcon from '@mui/icons-material/Email';
+import LockIcon from '@mui/icons-material/Lock';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 interface LoginProps {
     form: {
@@ -17,6 +21,7 @@ interface LoginProps {
 function LoginComponent({ form, handleChange }: LoginProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -33,7 +38,7 @@ function LoginComponent({ form, handleChange }: LoginProps) {
             
             if (response?.ok) {
                 console.log('ログイン成功:', response);
-                router.push('/'); // リダイレクト先のパスを指定
+                router.push('/dashboard'); // リダイレクト先を/dashboardに変更
                 router.refresh(); // セッション状態を更新
             } else {
                 setError('メールアドレスまたはパスワードが正しくありません');
@@ -46,30 +51,106 @@ function LoginComponent({ form, handleChange }: LoginProps) {
         }
     };
 
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+
     return (
-        <form onSubmit={handleSubmit}>
-            {error && <div className={styles.error}>{error}</div>}
-            <label htmlFor="email">メールアドレス</label>
-            <input 
-                type="email" 
+        <form onSubmit={handleSubmit} className="space-y-6">
+            {error && <Alert severity="error" className="mb-4">{error}</Alert>}
+            
+            <TextField
+                fullWidth
+                required
+                label="メールアドレス"
+                type="email"
                 name="email"
-                className={styles.input}
                 value={form.email}
                 onChange={handleChange}
+                variant="outlined"
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <EmailIcon className="text-orange-400" />
+                        </InputAdornment>
+                    ),
+                }}
+                className="bg-white"
+                sx={{
+                    '& .MuiOutlinedInput-root': {
+                        '&.Mui-focused fieldset': {
+                            borderColor: '#f97316',
+                        },
+                    },
+                    '& .MuiInputLabel-root.Mui-focused': {
+                        color: '#f97316',
+                    },
+                }}
             />
-            <label htmlFor="password">パスワード</label>
-            <input 
-                type="password"
+            
+            <TextField
+                fullWidth
+                required
+                label="パスワード"
+                type={showPassword ? 'text' : 'password'}
                 name="password"
-                className={styles.input}
                 value={form.password}
                 onChange={handleChange}
+                variant="outlined"
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <LockIcon className="text-orange-400" />
+                        </InputAdornment>
+                    ),
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton
+                                onClick={handleClickShowPassword}
+                                edge="end"
+                                className="text-gray-500 hover:text-orange-500"
+                            >
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                }}
+                className="bg-white"
+                sx={{
+                    '& .MuiOutlinedInput-root': {
+                        '&.Mui-focused fieldset': {
+                            borderColor: '#f97316',
+                        },
+                    },
+                    '& .MuiInputLabel-root.Mui-focused': {
+                        color: '#f97316',
+                    },
+                }}
             />
-            <button type="submit" disabled={isLoading}>
-                {isLoading ? 'ログイン中...' : 'ログイン'}
-            </button>
+            
+            <Box className="pt-2">
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    disabled={isLoading}
+                    className="bg-orange-500 hover:bg-orange-600 py-3 normal-case text-base font-medium"
+                    sx={{
+                        backgroundColor: '#f97316',
+                        '&:hover': {
+                            backgroundColor: '#ea580c',
+                        },
+                    }}
+                >
+                    {isLoading ? (
+                        <CircularProgress size={24} className="text-white" />
+                    ) : (
+                        'ログイン'
+                    )}
+                </Button>
+            </Box>
         </form>
-  );
+    );
 }
 
 export default LoginComponent

@@ -5,13 +5,17 @@ import { useState, useEffect } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import Cookies from 'js-cookie';
 import { v4 as uuidv4 } from 'uuid';
-import styles from '@/app/statics/styles/auth/auth.module.css';
+import { TextField, Button, InputAdornment, IconButton, Alert, Box, CircularProgress } from '@mui/material';
+import EmailIcon from '@mui/icons-material/Email';
+import LockIcon from '@mui/icons-material/Lock';
+import PersonIcon from '@mui/icons-material/Person';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const COOKIE_ID = 'device_uuid';
-// const COOKIE_NEWID = 'new_device_uuid';
 const COOKIE_EXPIRY_DAYS = 30;
 
-interface LoginProps {
+interface SignUpProps {
     form: {
       name: string;
       email: string;
@@ -21,7 +25,7 @@ interface LoginProps {
     setAuthType: (type: string) => void;
 }
 
-function SignUpComponent({ form, handleChange, setAuthType }: LoginProps) {
+function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -29,6 +33,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: LoginProps) {
     const [cookieUUID, setCookieUUID] = useState<string | null>(null);
     const [newCookieUUID, setNewCookieUUID] = useState<string | null>(null);
     const [deviceReady, setDeviceReady] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     // デバイス識別情報を初期化
     useEffect(() => {
@@ -62,13 +67,17 @@ function SignUpComponent({ form, handleChange, setAuthType }: LoginProps) {
         initDevice();
     }, []);
 
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!deviceReady) {
             setError('デバイス情報を準備中です。しばらくお待ちください。');
             return;
         }
-        // ...サインアップ処理の実装
+        
         setIsLoading(true);
         setError('');
         setSuccess('');
@@ -114,8 +123,6 @@ function SignUpComponent({ form, handleChange, setAuthType }: LoginProps) {
               
               // 成功したら2秒後にログインページにリダイレクト
               setTimeout(() => {
-                // 親コンポーネントのログイン/サインアップ切り替え機能を使う場合は、
-                // ここでrouter.pushではなく、親コンポーネントから渡されたsetAuthType('login')などを呼ぶとよい
                 setAuthType('login');
               }, 2000);
             }
@@ -129,36 +136,133 @@ function SignUpComponent({ form, handleChange, setAuthType }: LoginProps) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            {error && <div className={styles.error}>{error}</div>}
-            {success && <div className={styles.success}>{success}</div>}
-            <label htmlFor="email">メールアドレス</label>
-            <input 
-                type="email" 
+        <form onSubmit={handleSubmit} className="space-y-6">
+            {error && <Alert severity="error" className="mb-4">{error}</Alert>}
+            {success && <Alert severity="success" className="mb-4" sx={{ backgroundColor: '#ffedd5', color: '#9a3412' }}>
+                {success}
+            </Alert>}
+            
+            <TextField
+                fullWidth
+                required
+                label="メールアドレス"
+                type="email"
                 name="email"
-                className={styles.input}
                 value={form.email}
                 onChange={handleChange}
+                variant="outlined"
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <EmailIcon className="text-orange-400" />
+                        </InputAdornment>
+                    ),
+                }}
+                className="bg-white"
+                sx={{
+                    '& .MuiOutlinedInput-root': {
+                        '&.Mui-focused fieldset': {
+                            borderColor: '#f97316',
+                        },
+                    },
+                    '& .MuiInputLabel-root.Mui-focused': {
+                        color: '#f97316',
+                    },
+                }}
             />
-            <label htmlFor="password">パスワード</label>
-            <input 
-                type="password"
+            
+            <TextField
+                fullWidth
+                required
+                label="パスワード"
+                type={showPassword ? 'text' : 'password'}
                 name="password"
-                className={styles.input}
                 value={form.password}
                 onChange={handleChange}
+                variant="outlined"
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <LockIcon className="text-orange-400" />
+                        </InputAdornment>
+                    ),
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton
+                                onClick={handleClickShowPassword}
+                                edge="end"
+                                className="text-gray-500 hover:text-orange-500"
+                            >
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                }}
+                className="bg-white"
+                sx={{
+                    '& .MuiOutlinedInput-root': {
+                        '&.Mui-focused fieldset': {
+                            borderColor: '#f97316',
+                        },
+                    },
+                    '& .MuiInputLabel-root.Mui-focused': {
+                        color: '#f97316',
+                    },
+                }}
             />
-            <label htmlFor="name">名前</label>
-            <input
+            
+            <TextField
+                fullWidth
+                required
+                label="名前"
                 type="text"
                 name="name"
-                className={styles.input}
                 value={form.name}
                 onChange={handleChange}
+                variant="outlined"
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <PersonIcon className="text-orange-400" />
+                        </InputAdornment>
+                    ),
+                }}
+                className="bg-white"
+                sx={{
+                    '& .MuiOutlinedInput-root': {
+                        '&.Mui-focused fieldset': {
+                            borderColor: '#f97316',
+                        },
+                    },
+                    '& .MuiInputLabel-root.Mui-focused': {
+                        color: '#f97316',
+                    },
+                }}
             />
-            <button type="submit" disabled={isLoading}>
-                {isLoading ? 'サインアップ中...' : 'サインアップ'}
-            </button>
+            
+            <Box className="pt-2">
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    disabled={isLoading || !deviceReady}
+                    className="bg-orange-500 hover:bg-orange-600 py-3 normal-case text-base font-medium"
+                    sx={{
+                        backgroundColor: '#f97316',
+                        '&:hover': {
+                            backgroundColor: '#ea580c',
+                        },
+                    }}
+                >
+                    {isLoading ? (
+                        <CircularProgress size={24} className="text-white" />
+                    ) : !deviceReady ? (
+                        'デバイス情報を準備中...'
+                    ) : (
+                        'サインアップ'
+                    )}
+                </Button>
+            </Box>
         </form>
     );
 };
