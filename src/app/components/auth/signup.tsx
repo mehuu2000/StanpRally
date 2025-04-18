@@ -25,9 +25,23 @@ interface SignUpProps {
     setAuthType: (type: string) => void;
 }
 
+interface ValidationError {
+    code: string;
+    message: string;
+    path?: string[];
+    validation?: string;
+    minimum?: number;
+    inclusive?: boolean;
+    exact?: boolean;
+    type?: string;
+}
+
 function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [errorMail, setErrorMail] = useState('');
+    const [errorPassword, setErrorPassword] = useState('');
+    const [errorName, setErrorName] = useState('');
     const [success, setSuccess] = useState('');
     const [visitorId, setVisitorId] = useState<string | null>(null);
     const [cookieUUID, setCookieUUID] = useState<string | null>(null);
@@ -80,6 +94,8 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
         
         setIsLoading(true);
         setError('');
+        setErrorMail('');
+        setErrorPassword('');
         setSuccess('');
 
         try {
@@ -104,13 +120,48 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
             const data = await response.json();
       
             if (!response.ok) {
-              // エラー処理
-              setError(data.message || 'アカウント作成に失敗しました');
-              console.error('サインアップエラー:', data);
-            } else {
-              // 成功処理
-              setSuccess(`アカウントが作成され、${form.email}に確認メールを送信しました。ログインページに移動します...`);
-              console.log('サインアップ成功:', data);
+                console.log(data.message || 'アカウント作成に失敗しました');
+              
+                // エラー処理
+                if (data.error && Array.isArray(data.error)) {
+                  // 全てのエラーメッセージをリセット
+                  setErrorMail('');
+                  setErrorPassword('');
+                  setErrorName('');
+                  
+                  // 各エラーを適切なフィールドに割り当てる
+                  data.error.forEach((err: ValidationError) => {
+                    if (err.path && err.path.length > 0) {
+                      const fieldName = err.path[0];
+                      const errorMessage = err.message;
+                      
+                      switch (fieldName) {
+                        case 'email':
+                          setErrorMail(errorMessage);
+                          break;
+                        case 'password':
+                          setErrorPassword(errorMessage);
+                          break;
+                        case 'name':
+                          setErrorName(errorMessage);
+                          break;
+                        default:
+                          // 未知のフィールドのエラーは一般エラーとして表示
+                          setError(prevError => prevError 
+                            ? `${prevError}\n${errorMessage}` 
+                            : errorMessage);
+                      }
+                    }
+                  });
+                } else {
+                  // データ構造が予期しない場合は一般エラーとして表示
+                  setError(data.message || 'アカウント作成に失敗しました');
+                }
+                console.error('サインアップエラー:', data);
+              } else {
+                // 成功処理 - 変更なし
+                setSuccess(`アカウントが作成され、${form.email}に確認メールを送信しました。ログインページに移動します...`);
+                console.log('サインアップ成功:', data);
 
               // 成功時に新しいUUIDをCookieに保存
               if (newCookieUUID) {
@@ -151,6 +202,8 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 value={form.email}
                 onChange={handleChange}
                 variant="outlined"
+                error={!!errorMail}
+                helperText={errorMail}
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
@@ -180,6 +233,8 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 value={form.password}
                 onChange={handleChange}
                 variant="outlined"
+                error={!!errorPassword}
+                helperText={errorPassword}
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
@@ -220,6 +275,8 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 value={form.name}
                 onChange={handleChange}
                 variant="outlined"
+                error={!!errorName}
+                helperText={errorName}
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">

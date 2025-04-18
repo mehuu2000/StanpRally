@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
 
     const result = signupValideate.safeParse(body);
     if(!result.success) {
-        return NextResponse.json({ message: '入力内容に誤りがあります', error: result.error.errors}, {status: 400});
+        return NextResponse.json({ message: result.error.errors, error: result.error.errors}, {status: 400});
     }
 
     const { name, email, password, visitorId, cookieUUID, newCookieUUID } = result.data;
