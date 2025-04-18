@@ -3,6 +3,8 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs'
 import prisma from "@/app/lib/prisma";
 
+export const dynamic = 'force-dynamic'
+
 declare module "next-auth" {
     interface Session {
         user: {
