@@ -114,7 +114,7 @@ export async function POST(req: Request) {
                 data: updateData
             })
 
-            return NextResponse.json({ message: "Stamp collected", distance, inner: updateData[innerField] })
+            return NextResponse.json({ message: "Stamp collected", distance, inner: updateData[innerField], status: 200 })
         } else {
         // 位置情報なしでもスタンプだけは押せる（innerはfalse）
         updateData[innerField] = false
@@ -123,7 +123,7 @@ export async function POST(req: Request) {
             data: updateData
         })
 
-        return NextResponse.json({ message: "Stamp collected (no location)", inner: false })
+        return NextResponse.json({ message: "Stamp collected", inner: false, status: 200 })
         }
     } catch (err) {
         console.error(err)
