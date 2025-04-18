@@ -1,7 +1,6 @@
 'use client'
 
 //QR作成後、このページは削除
-// import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { QRCodeSVG } from 'qrcode.react';
 import { spotPasswords, SpotKey } from '../lib/spot-passwords';
@@ -44,7 +43,6 @@ export default function QRPage() {
                   value={`${baseUrl}/scan?spot=${spot}&userId=${publicId}&password=${spotPasswords[`spot${spot}` as SpotKey]}`}
                   size={200}
                   level="H"
-                  includeMargin={true}
                 />
               </div>
             ))}

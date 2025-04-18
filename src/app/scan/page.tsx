@@ -22,7 +22,6 @@ export default function ScanPage() {
       }
 
       try {
-          // ここで stamp に POST
           const stampRes = await fetch('/api/stamp', {
             method: 'POST',
             headers: {
