@@ -4,6 +4,8 @@ import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 // import { sendWelcomeEmail } from '@/app/services/email/notification';
 
+export const dynamic = 'force-dynamic'
+
 const signupValideate = z.object({
     name: z.string().min(3, '名前は2文字以上である必要があります'),
     email: z.string()
@@ -29,7 +31,7 @@ export async function POST(req: NextRequest) {
 
     const result = signupValideate.safeParse(body);
     if(!result.success) {
-        return NextResponse.json({ message: 'バリデーションエラー ', error: result.error.errors}, {status: 400});
+        return NextResponse.json({ message: '入力内容に誤りがあります', error: result.error.errors}, {status: 400});
     }
 
     const { name, email, password, visitorId, cookieUUID, newCookieUUID } = result.data;
@@ -80,6 +82,7 @@ export async function POST(req: NextRequest) {
                 deviceControlId = newDevice.id;
             } else {
                 // visitorId 登録済み
+                // 二件まで登録可能
                 if (deviceControl.counter < 2) {
                     canRegister = true;
                     deviceControlId = deviceControl.id;

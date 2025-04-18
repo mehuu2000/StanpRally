@@ -3,6 +3,8 @@ import prisma from '@/app/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 
+export const dynamic = 'force-dynamic'
+
 /*
 * 
 * name: 名前
