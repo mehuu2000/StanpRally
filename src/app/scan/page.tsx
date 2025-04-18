@@ -16,7 +16,6 @@ export default function ScanPage() {
       const password = urlParams.get('password');
 
       // console.log('URL Params:', { spot, userId, password });
-
       if (!spot || !userId || !password) {
         setMessage('URLパラメータが不足しています');
         return;
@@ -54,7 +53,7 @@ export default function ScanPage() {
     setTimeout(() => {
       router.push('/dashboard');
     }, 2000);
-  }, []);
+  }, [router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
