@@ -1,17 +1,14 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { Container, Typography, Paper, Box, Grid, Card, CardContent, CircularProgress } from '@mui/material';
+import { Container, Typography, Paper, Box, Card, CardContent, CircularProgress } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import Image from 'next/image';
 import DashboardHeader from '@/app/components/dashboard/header';
 import { Collections } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
-
-// 仮
-interface StampInfo {
-  id: number;
-  collected: boolean;
-}
+import { useEffect, useState } from 'react'
+import { Stamps } from "@prisma/client"
 
 // スタンプ名のみの情報（表示用）
 const stampNames = {
@@ -23,11 +20,36 @@ const stampNames = {
 };
 
 export default function DashboardPage() {
-  const { data: session, status } = useSession();
+  // const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
+  const [stamps, setStamps] = useState<Stamps>()
+  const [loading, setLoading] = useState(true)
   
+  useEffect(() => {
+    const fetchStamps = async () => {
+      try {
+        const res = await fetch('/api/stamp', {
+          method: 'GET',
+          credentials: 'include', // セッションCookieが必要な場合
+        })
+        const json = await res.json()
+        if (res.ok) {
+          setStamps(json.data.stamps)
+        } else {
+          console.error('エラー:', json.message)
+        }
+      } catch (err) {
+        console.error('通信エラー:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchStamps()
+  }, [])
   // セッションの読み込み中
-  if (status === 'loading') {
+  if (status === 'loading' || loading==true) {
     return (
       <Box className="flex justify-center items-center min-h-screen">
         <CircularProgress sx={{ color: '#f97316' }} />
@@ -42,18 +64,15 @@ export default function DashboardPage() {
     return null;
   }
 
-  // 仮のスタンプデータ
-  const stampData: StampInfo[] = [
-    { id: 1, collected: true },
-    { id: 2, collected: true },
-    { id: 3, collected: false },
-    { id: 4, collected: true },
-    { id: 5, collected: false },
-  ];
-  
+  if(!stamps){
+    return
+  }
   // 収集したスタンプの数
-  const collectedCount = stampData.filter(stamp => stamp.collected).length;
+  const collectedCount = stamps.count;
+  type StampKeys = keyof Pick<Stamps, 'stamp1' | 'stamp2' | 'stamp3' | 'stamp4' | 'stamp5'>;
 
+  const stampKeys: StampKeys[] = ['stamp1', 'stamp2', 'stamp3', 'stamp4', 'stamp5'];
+  
   return (
     <div className="min-h-screen bg-orange-50">
       <DashboardHeader />
@@ -71,7 +90,7 @@ export default function DashboardPage() {
             </Box>
             <Box className="bg-white bg-opacity-20 p-4 rounded-lg text-center">
               <Typography variant="h4" className="font-bold">
-                {collectedCount}/{stampData.length}
+                {collectedCount}/{5}
               </Typography>
               <Typography variant="body2">
                 収集済み
@@ -89,38 +108,42 @@ export default function DashboardPage() {
           </Box>
           <CardContent className="p-6">
             <Grid container spacing={5} justifyContent="center">
-              {stampData.map((stamp) => (
-                <Grid item xs={6} sm={4} md={2.4} key={stamp.id}>
-                  <Box className="flex flex-col items-center">
-                    <Box 
-                      className="relative w-32 h-32 mb-3 rounded-full overflow-hidden shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
-                      sx={{
-                        background: stamp.collected ? 'rgba(249, 115, 22, 0.05)' : 'rgba(229, 231, 235, 0.1)',
-                      }}
-                    >
-                      <Image
-                        src={stamp.collected ? `/stamp${stamp.id}.png` : '/stampnot.png'}
-                        alt={stampNames[stamp.id as keyof typeof stampNames]}
-                        width={128}
-                        height={128}
-                      />
+            {stampKeys.map((key,stampIndex) => {
+                const isCollected = stamps[key]
+                return (
+                  <Grid key={key} component="div">
+                    <Box className="flex flex-col items-center">
+                      <Box
+                        className="relative w-32 h-32 mb-3 rounded-full overflow-hidden shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
+                        sx={{
+                          background: isCollected
+                            ? 'rgba(249, 115, 22, 0.05)'
+                            : 'rgba(229, 231, 235, 0.1)',
+                        }}
+                      >
+                        <Image
+                          src={isCollected ? `/${key}.png` : '/stampnot.png'}
+                          alt={stampNames[stampIndex+1 as keyof typeof stampNames]}
+                          width={128}
+                          height={128}
+                        />
+                      </Box>
+                      <Typography variant="subtitle1" className="font-medium text-center text-gray-800">
+                      {stampNames[stampIndex+1 as keyof typeof stampNames]}
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        className={`text-center mt-1 px-3 py-1 rounded-full ${
+                          isCollected ? 'bg-orange-100 text-orange-800' : 'bg-gray-100 text-gray-500'
+                        }`}
+                      >
+                        {isCollected ? '収集済み' : '未収集'}
+                      </Typography>
                     </Box>
-                    <Typography variant="subtitle1" className="font-medium text-center text-gray-800">
-                      {stampNames[stamp.id as keyof typeof stampNames]}
-                    </Typography>
-                    <Typography 
-                      variant="caption" 
-                      className={`text-center mt-1 px-3 py-1 rounded-full ${
-                        stamp.collected 
-                          ? 'bg-orange-100 text-orange-800' 
-                          : 'bg-gray-100 text-gray-500'
-                      }`}
-                    >
-                      {stamp.collected ? '収集済み' : '未収集'}
-                    </Typography>
-                  </Box>
-                </Grid>
-              ))}
+                  </Grid>
+                );
+              })
+            }
             </Grid>
           </CardContent>
         </Card>
