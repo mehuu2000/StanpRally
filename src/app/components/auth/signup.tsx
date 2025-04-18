@@ -109,7 +109,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
               console.error('サインアップエラー:', data);
             } else {
               // 成功処理
-              setSuccess('アカウント作成に成功しました！ログインページに移動します...');
+              setSuccess(`アカウントが作成され、${form.email}に確認メールを送信しました。ログインページに移動します...`);
               console.log('サインアップ成功:', data);
 
               // 成功時に新しいUUIDをCookieに保存
@@ -124,7 +124,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
               // 成功したら2秒後にログインページにリダイレクト
               setTimeout(() => {
                 setAuthType('login');
-              }, 2000);
+              }, 5000);
             }
           } catch (err) {
             // ネットワークエラーなどの例外処理

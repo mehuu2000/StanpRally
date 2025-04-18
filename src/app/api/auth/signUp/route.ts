@@ -2,15 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
-
-/*
-* 
-* name: 名前
-* email: メールアドレス
-* passWord: パスワード
-* 
-* これらをフロントから受け取る
-*/
+import { sendWelcomeEmail } from '@/app/services/email/notification';
 
 const signupValideate = z.object({
     name: z.string().min(3, '名前は2文字以上である必要があります'),
@@ -88,7 +80,7 @@ export async function POST(req: NextRequest) {
                 deviceControlId = newDevice.id;
             } else {
                 // visitorId 登録済み
-                if (deviceControl.counter < 3) {
+                if (deviceControl.counter < 2) {
                     canRegister = true;
                     deviceControlId = deviceControl.id;
                 } else {
@@ -111,6 +103,11 @@ export async function POST(req: NextRequest) {
                     name,
                     email,
                     hashedPassword,
+                    stamps: {
+                        create: {
+                            updatedAt: new Date(),
+                        }
+                    }
                 },
             });
 
@@ -135,11 +132,22 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: errorMessage }, { status: 403 });
         }
         
-        if (!result) {
+        if (!createdUser) {
             return NextResponse.json({ message: '登録に失敗しました' }, { status: 400 });
         }
 
         console.log('ユーザー登録が成功しました', createdUser);
+
+        try {
+            // TypeScriptエラーを解消するために明示的な型チェック
+            await sendWelcomeEmail({
+                email: createdUser.email,
+                name: createdUser.name
+            });
+            console.log(`確認メールを ${createdUser.email} に送信しました`);
+        } catch (error) {
+            console.error('確認メール送信中にエラーが発生しました:', error);
+        }
 
         return NextResponse.json({ message: 'ユーザー登録が成功しました', user: createdUser }, { status: 201 });
 
