@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import AuthContext from './context/AuthContext';
-import AuthGuard from "./components/auth/authGuard";
 
 
 export const metadata: Metadata = {
@@ -15,7 +14,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="ja">
       <body>
         <AuthContext>
-          <AuthGuard>{children}</AuthGuard>
+          {children}
         </AuthContext>
       </body>
     </html>
