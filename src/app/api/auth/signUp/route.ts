@@ -27,6 +27,7 @@ const signupValideate = z.object({
 const HASHCOUNT = 10;
 
 export async function POST(req: NextRequest) {
+    console.log("処理開始");
     const body = await req.json();
 
     const result = signupValideate.safeParse(body);
