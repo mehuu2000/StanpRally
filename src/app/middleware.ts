@@ -34,7 +34,7 @@ export async function middleware(request: NextRequest) {
         if (token) {
           return NextResponse.redirect(new URL('/dashboard', request.url));
         }
-      } catch (e) {
+      } catch (_) {
         // トークン検証エラーは無視して次へ
       }
     }
@@ -50,7 +50,7 @@ export async function middleware(request: NextRequest) {
       url.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(url);
     }
-  } catch (e) {
+  } catch (_) {
     // エラー発生時は認証ページへ
     return NextResponse.redirect(new URL(authPath, request.url));
   }
