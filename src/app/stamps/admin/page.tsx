@@ -12,7 +12,7 @@ export default function AdminStampPage() {
   }
   const [data, setData] = useState<StampWithEmail[]>([])
   const [loading, setLoading] = useState(true)
-  const [ errrorMessage, setErrorMessage] = useState<string>('')
+  const [ errorMessage, setErrorMessage] = useState<string>('')
   const router = useRouter()
 
   useEffect(() => {
@@ -35,9 +35,9 @@ export default function AdminStampPage() {
 
   if (loading) return <p className="p-4">読み込み中...</p>
 
-  return errrorMessage ? (
+  return errorMessage ? (
     <div className="p-4">
-      <h1 className="text-red-500 text-xl">{errrorMessage}</h1>
+      <h1 className="text-red-500 text-xl">{errorMessage}</h1>
     </div>
   ) : (
         <div className="p-6">
