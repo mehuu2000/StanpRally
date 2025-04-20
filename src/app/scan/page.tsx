@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function ScanPage() {
   const [message, setMessage] = useState('スタンプ処理中...');
   const [success, setSuccess] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   useEffect(() => {
     const doScan = async () => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -39,6 +42,15 @@ export default function ScanPage() {
           if (res.status==200) {
             setSuccess(true);
             setMessage('スタンプが記録されました！');
+
+            // 成功したら、スタンプデータのキャッシュを無効化
+            try {
+              queryClient.invalidateQueries({ queryKey: ['stamps'] });
+              console.log('Stamps cache invalidated successfully');
+            } catch (cacheError) {
+              // キャッシュ無効化に失敗した場合でも処理を継続
+              console.error('Failed to invalidate cache:', cacheError);
+            }
           } else {
             setMessage(`スタンプ記録に失敗しました:${res.message}`);
           }
@@ -49,10 +61,12 @@ export default function ScanPage() {
     };
 
     doScan();
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       router.push('/dashboard');
     }, 2000);
-  }, [router]);
+    
+    return () => clearTimeout(timer);
+  }, [router, queryClient]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

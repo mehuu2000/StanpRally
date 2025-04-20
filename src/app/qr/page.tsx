@@ -4,12 +4,12 @@
 import { useRouter } from 'next/navigation';
 import { QRCodeSVG } from 'qrcode.react';
 import { spotPasswords, SpotKey } from '../lib/spot-passwords';
-import { useSession } from 'next-auth/react';
+import { useAuthSession } from '../hooks/useAuthSession';
 import { useEffect } from 'react';
 
 export default function QRPage() {
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session, status } = useAuthSession();
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
   useEffect(() => {

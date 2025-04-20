@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
-import { useSession, signOut } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useAuthSession } from '@/app/hooks/useAuthSession';
 import { 
   AppBar, 
   Toolbar, 
@@ -12,10 +14,25 @@ import {
 } from '@mui/material';
 
 export default function DashboardHeader() {
-  const { data: session } = useSession();
+  const { data: session } = useAuthSession();
+  const queryClient = useQueryClient(); 
 
-  const handleLogout = () => {
-    signOut({ callbackUrl: '/auth' });
+  const handleLogout = async () => {
+    try {
+      // 1. React Queryキャッシュのクリア
+      queryClient.removeQueries({ queryKey: ['stamps'] }); // スタンプデータ削除
+      queryClient.removeQueries({ queryKey: ['session'] }); // セッションキャッシュ削除
+      
+      console.log('キャッシュがクリアされました');
+      
+      // 2. Next-Authのログアウト処理
+      await signOut({ callbackUrl: '/auth' });
+      
+    } catch (error) {
+      console.error('ログアウト中にエラーが発生しました:', error);
+      // エラー時は通常のログアウトにフォールバック
+      signOut({ callbackUrl: '/auth' });
+    }
   };
 
   // ユーザー名を取得（存在する場合）

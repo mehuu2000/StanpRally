@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
 // キャッシュ設定
-export const runtime = 'edge';
+export const runtime = 'experimental-edge';
 
 // 重要なルートのみチェックするよう最適化
 export async function middleware(request: NextRequest) {
@@ -38,7 +38,11 @@ export async function middleware(request: NextRequest) {
         // トークン検証エラーは無視して次へ
       }
     }
-    return NextResponse.next();
+    // 公開ページ用のキャッシュを設定
+    const response = NextResponse.next();
+    // 公開ページは長めにキャッシュ可能
+    response.headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=4200');
+    return response;
   }
   
   // 認証が必要なパスのみトークン検証
@@ -50,6 +54,25 @@ export async function middleware(request: NextRequest) {
       url.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(url);
     }
+
+    const response = NextResponse.next();
+
+    if (pathname.startsWith('/dashboard')) {
+      // ダッシュボードは短めのキャッシュ（プライベート）
+      response.headers.set('Cache-Control', 'private, max-age=60, stale-while-revalidate=600');
+      response.headers.set('Vary', 'Cookie, Authorization');
+    } else if (pathname.startsWith('/stamps/admin')) {
+      // スタンプページは少し長めにキャッシュ可能
+      response.headers.set('Cache-Control', 'private, max-age=120, stale-while-revalidate=1800');
+    } else if (pathname === '/scan') {
+      // スキャンページはキャッシュしない
+      response.headers.set('Cache-Control', 'no-store');
+    } else {
+      // その他の認証済みページは中程度のキャッシュ
+      response.headers.set('Cache-Control', 'private, max-age=120, stale-while-revalidate=600');
+    }
+    
+    return response;
   } catch {
     // エラー発生時は認証ページへ
     return NextResponse.redirect(new URL(authPath, request.url));
@@ -63,11 +86,8 @@ export const config = {
   matcher: [
     // 重要なパスのみ明示的に指定
     '/dashboard',
-    '/dashboard/:path*',
     '/stamps',
     '/stamps/:path*',
-    '/qr',
-    '/qr/:path*',
     '/scan',
     '/auth',
     '/',

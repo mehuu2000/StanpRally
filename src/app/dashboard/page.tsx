@@ -1,14 +1,15 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
 import { Container, Typography, Paper, Box, Card, CardContent, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Image from 'next/image';
 import DashboardHeader from '@/app/components/dashboard/header';
 import { Collections } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react'
+// import { useEffect, useState } from 'react'
 import { Stamps } from "@prisma/client"
+import { useAuthSession } from '@/app/hooks/useAuthSession';
+import { useStamps } from '@/app/hooks/useStamps';
 
 // スタンプ名のみの情報（表示用）
 const stampNames = {
@@ -21,39 +22,53 @@ const stampNames = {
 
 export default function DashboardPage() {
   // const { data: session, status } = useSession();
-  const { status } = useSession();
+  const { status } = useAuthSession();
   const router = useRouter();
-  const [stamps, setStamps] = useState<Stamps>()
-  const [loading, setLoading] = useState(true)
+  // const [stamps, setStamps] = useState<Stamps>()
+  const { data, isLoading: stampsLoading, error } = useStamps();
+  // const [loading, setLoading] = useState(true)
   
-  useEffect(() => {
-    const fetchStamps = async () => {
-      try {
-        const res = await fetch('/api/stamp', {
-          method: 'GET',
-          credentials: 'include', // セッションCookieが必要な場合
-        })
-        const json = await res.json()
-        if (res.ok) {
-          setStamps(json.data.stamps)
-        } else {
-          console.error('エラー:', json.message)
-        }
-      } catch (err) {
-        console.error('通信エラー:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
+  // useEffect(() => {
+  //   const fetchStamps = async () => {
+  //     try {
+  //       const res = await fetch('/api/stamp', {
+  //         method: 'GET',
+  //         credentials: 'include', // セッションCookieが必要な場合
+  //       })
+  //       const json = await res.json()
+  //       if (res.ok) {
+  //         setStamps(json.data.stamps)
+  //       } else {
+  //         console.error('エラー:', json.message)
+  //       }
+  //     } catch (err) {
+  //       console.error('通信エラー:', err)
+  //     } finally {
+  //       setLoading(false)
+  //     }
+  //   }
 
-    fetchStamps()
-  }, [])
+  //   fetchStamps()
+  // }, [])
   // セッションの読み込み中
-  if (status === 'loading' || loading==true) {
+  if (status === 'loading' || stampsLoading) {
     return (
       <Box className="flex justify-center items-center min-h-screen">
         <CircularProgress sx={{ color: '#f97316' }} />
         <Typography className="ml-3 text-orange-600">読み込み中...</Typography>
+      </Box>
+    );
+  }
+  if (error) {
+    return (
+      <Box className="flex justify-center items-center min-h-screen flex-col">
+        <Typography className="text-red-600 mb-4">データの読み込みに失敗しました</Typography>
+        <button 
+          onClick={() => window.location.reload()}
+          className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
+        >
+          再読み込み
+        </button>
       </Box>
     );
   }
@@ -64,11 +79,17 @@ export default function DashboardPage() {
     return null;
   }
 
-  if(!stamps){
-    return
+  if (!data?.data?.stamps) {
+    return (
+      <Box className="flex justify-center items-center min-h-screen">
+        <Typography className="text-orange-600">データがありません</Typography>
+      </Box>
+    );
   }
   // 収集したスタンプの数
+  const stamps = data.data.stamps;
   const collectedCount = stamps.count;
+
   type StampKeys = keyof Pick<Stamps, 'stamp1' | 'stamp2' | 'stamp3' | 'stamp4' | 'stamp5'>;
 
   const stampKeys: StampKeys[] = ['stamp1', 'stamp2', 'stamp3', 'stamp4', 'stamp5'];

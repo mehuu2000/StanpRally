@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import AuthContext from './context/AuthContext';
+import ClientLayout from './ClientLayout';
 
 
 export const metadata: Metadata = {
@@ -13,9 +13,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="ja">
       <body>
-        <AuthContext>
+        <ClientLayout>
           {children}
-        </AuthContext>
+        </ClientLayout>
       </body>
     </html>
   );
