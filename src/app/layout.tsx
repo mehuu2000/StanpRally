@@ -15,11 +15,12 @@ export const metadata: Metadata = {
     title: "関大文化フェス",
     siteName: "関大文化フェス",
     type: "website",
+    url:"https://stamp-rally-azure.vercel.app",
     images: [
       {
         url: "https://stamp-rally-azure.vercel.app/og-image.png",
         width: 1200,
-        height: 630,
+        height: 1200,
         alt: "関大文化フェス",
       },
     ],
