@@ -14,8 +14,8 @@ export function useAuthSession() {
     queryKey: ['session'],
     queryFn: () => Promise.resolve(sessionData),
     enabled: nextAuthStatus !== 'loading',
-    staleTime: 180 * 1000, // 3分間は新鮮なデータとして扱う（AuthContextと合わせる）
-    gcTime: 5 * 60 * 1000, // 5分間キャッシュを保持（AuthContextと合わせる）
+    staleTime: 30 * 60 * 1000, // 3分間は新鮮なデータとして扱う（AuthContextと合わせる）
+    gcTime: 60 * 60 * 1000, // 5分間キャッシュを保持（AuthContextと合わせる）
     initialData: sessionData, // 初期データとして既存のセッションデータを使用
     refetchOnWindowFocus: false, // ウィンドウフォーカス時に再取得しない（AuthContextと合わせる）
   });

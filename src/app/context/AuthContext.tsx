@@ -10,8 +10,8 @@ export default function AuthContext({ children }: { children: React.ReactNode })
   const [queryClient] = useState(() => new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 180 * 1000, // 3分間はデータを新鮮と見なす
-        gcTime: 5 * 60 * 1000, // 5分間キャッシュを保持
+        staleTime: 30 * 60 * 1000, // 3分間はデータを新鮮と見なす
+        gcTime: 60 * 60 * 1000, // 5分間キャッシュを保持
         refetchOnWindowFocus: false, // ウィンドウがフォーカスされたときに再取得しない
         retry: 1, // エラー時の再試行回数
       },
