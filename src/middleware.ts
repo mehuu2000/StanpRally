@@ -19,7 +19,7 @@ export async function middleware(request: NextRequest) {
   }
   
   // 公開パス
-  const publicPaths = ['/'];
+  const publicPaths = ['/',];
   const authPath = '/auth';
   
   // 認証が必要なルートかどうか確認する簡略化
@@ -77,8 +77,6 @@ export async function middleware(request: NextRequest) {
     // エラー発生時は認証ページへ
     return NextResponse.redirect(new URL(authPath, request.url));
   }
-  
-  return NextResponse.next();
 }
 
 // 最小限のマッチャー

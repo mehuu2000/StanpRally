@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { signOut } from 'next-auth/react';
-import { useQueryClient } from '@tanstack/react-query';
 import { useAuthSession } from '@/app/hooks/useAuthSession';
+import { useStamps } from '@/app/hooks/useStamps';
 import { 
   AppBar, 
   Toolbar, 
@@ -14,16 +14,15 @@ import {
 } from '@mui/material';
 
 export default function DashboardHeader() {
-  const { data: session } = useAuthSession();
-  const queryClient = useQueryClient(); 
+  const { data: session, clear: clearSession } = useAuthSession();
+  const { clear: clearStamps } = useStamps();
 
   const handleLogout = async () => {
     try {
       // 1. React Queryキャッシュのクリア
-      queryClient.removeQueries({ queryKey: ['stamps'] }); // スタンプデータ削除
-      queryClient.removeQueries({ queryKey: ['session'] }); // セッションキャッシュ削除
-      
-      console.log('キャッシュがクリアされました');
+      clearSession();
+      clearStamps();
+      // queryClient.removeQueries({ queryKey: ['session'] }); // セッションキャッシュ削除
       
       // 2. Next-Authのログアウト処理
       await signOut({ callbackUrl: '/auth' });
