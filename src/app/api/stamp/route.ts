@@ -71,9 +71,6 @@ export async function POST(req: Request) {
         // if(publicId!=frontPublicId){
         //     return NextResponse.json({ message: "Unauthorized", status: 401 })
         // }
-        if(!publicId){
-            return NextResponse.json({ message: "Unauthorized", status: 401 })
-        }
 
         // 有効なstampIdかチェック
         if (![1, 2, 3, 4, 5].includes(stampId)) {
