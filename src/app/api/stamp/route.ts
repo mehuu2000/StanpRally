@@ -17,15 +17,15 @@ function getDistance(lat1: number, lng1: number, lat2: number, lng2: number): nu
 }
 
 // スタンプ地点情報（仮データ）
-const stampPoints: Record<number, { lat: number, lng: number, password: string}> = {
-    1: { lat: 34.77499379168766, lng: 135.51212397901585 , password: "yuu1ztCdwsa7W9evhcZG3UmigiZq3mhqX7LNz5SCxeM="},
-    2: { lat: 34.77435822763561, lng: 135.51176280359462, password: "tK9XiYSLNGT++l6Y0gbsEfqZd2CnsfITY4E/mv/lt1c="},
-    3: { lat: 34.774364081650134, lng: 135.51110844565466 , password: "KscGcKqw8M0o/WqlmhPAXtNX20XeBno4M2PgjleLqXI="},
-    4: { lat: 34.77482176055961, lng: 135.51125279706034 , password: "dFHIvy+xliLvvbQOHY72V/IAnLtT8y+AbrvX8W05IXA="},
-    5: { lat: 34.77435822763561, lng: 135.51176280359462, password: "PL91tZoBYdaqmPU/zfF6ubHPnBAuXvqBuOc2KD36nUQ="}
+const stampPoints: Record<number, { lat: number, lng: number, password: string|undefined}> = {
+    1: { lat: 34.77499379168766, lng: 135.51212397901585 , password: process.env.QR_Password1},
+    2: { lat: 34.77435822763561, lng: 135.51176280359462, password: process.env.QR_Password2},
+    3: { lat: 34.774364081650134, lng: 135.51110844565466 , password: process.env.QR_Password3},
+    4: { lat: 34.77482176055961, lng: 135.51125279706034 , password: process.env.QR_Password4},
+    5: { lat: 34.77435822763561, lng: 135.51176280359462, password: process.env.QR_Password5}
 }
 
-//フロントから取得する情報　lat,lng,stampId,password,frontPublicId ※lat,lngはnullでもよい
+//フロントから取得する情報　lat,lng,stampId,password ※lat,lngはnullでもよい
 export async function GET() {
     const session = await getServerSession(authOptions)
     
@@ -135,7 +135,16 @@ export async function POST(req: Request) {
         return NextResponse.json({ message: "Stamp collected", inner: false, status: 200 })
         }
     } catch (err) {
-        console.error(err)
-        return Response.json({ message: "Unauthorized", status: 401 })
+        if (err instanceof z.ZodError) {
+            return NextResponse.json(
+                {
+                message: "Validation error",
+                // errors: err.errors
+                },
+                { status: 400 }
+            )
+        }
+        // その他のエラー
+        return NextResponse.json({ message: "Unexpected server error" },{ status: 500 })
     }
 }
