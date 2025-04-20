@@ -1,12 +1,9 @@
-// app/api/stamp/admin/route.ts
-
 import { NextResponse } from "next/server"
 import client from "@/app/lib/prisma"
 import { User, Stamps } from "@prisma/client"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/lib/nextAuth"
 
-//一時的に誰でも確認できるようになっている
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
