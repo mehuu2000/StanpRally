@@ -47,14 +47,14 @@ export default function ScanPage() {
       const urlParams = new URLSearchParams(window.location.search);
       const spotParam = urlParams.get('spot');
       const spot = spotParam ? Number(spotParam) : null;
-      const userId = urlParams.get('userId');
+      // const userId = urlParams.get('userId');
       const password = urlParams.get('password');
   
-      if (!spot || !userId || !password) {
+      if (!spot || !password) {
         setMessage('URLパラメータが不足しています');
         return;
       }
-  
+      
       try {
         const stampRes = await fetch('/api/stamp', {
           method: 'POST',
@@ -66,7 +66,7 @@ export default function ScanPage() {
             lng: location.longitude,
             stampId: spot,
             password: password,
-            frontPublicId: userId,
+            // frontPublicId: userId,
           }),
         });
         const res = await stampRes.json();

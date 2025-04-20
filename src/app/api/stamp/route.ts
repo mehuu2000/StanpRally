@@ -55,12 +55,12 @@ export async function POST(req: Request) {
             lng: z.number().optional(),
             stampId: z.number(),
             password: z.string(),
-            frontPublicId: z.string()
+            // frontPublicId: z.string()
         })
         
         const body = stampSchema.parse(await req.json())
-        
-        const { lat, lng, stampId, password, frontPublicId } = body
+        // const { lat, lng, stampId, password, frontPublicId } = body
+        const { lat, lng, stampId, password } = body
 
         const session = await getServerSession(authOptions)
         
@@ -68,7 +68,10 @@ export async function POST(req: Request) {
             return NextResponse.json({ message: "Unauthorized", status: 401 })
         }
         const publicId = session.user.publicId
-        if(publicId!=frontPublicId){
+        // if(publicId!=frontPublicId){
+        //     return NextResponse.json({ message: "Unauthorized", status: 401 })
+        // }
+        if(!publicId){
             return NextResponse.json({ message: "Unauthorized", status: 401 })
         }
 
@@ -79,8 +82,6 @@ export async function POST(req: Request) {
         if(stampPoints[stampId].password != password){
             return NextResponse.json({ message: "Missing password", status: 400 })
         }
-        
-
         // ユーザーとStampsを取得
         const user = await client.user.findUnique({
             where: { publicId },
