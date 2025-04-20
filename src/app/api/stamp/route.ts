@@ -4,6 +4,7 @@ import { NextResponse } from "next/server"
 import client from "@/app/lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/lib/nextAuth"
+import { z } from "zod"
 
 const R = 6371e3 // 地球半径（メートル）
 
@@ -16,12 +17,12 @@ function getDistance(lat1: number, lng1: number, lat2: number, lng2: number): nu
 }
 
 // スタンプ地点情報（仮データ）
-const stampPoints: Record<number, { lat: number, lng: number, password: number}> = {
-    1: { lat: 34.822444, lng: 135.522843 , password: 1},
-    2: { lat: 34.822900, lng: 135.523000 , password: 2},
-    3: { lat: 34.823100, lng: 135.522500 , password: 3},
-    4: { lat: 34.823300, lng: 135.522200 , password: 4},
-    5: { lat: 34.823500, lng: 135.521900 , password: 5}
+const stampPoints: Record<number, { lat: number, lng: number, password: string}> = {
+    1: { lat: 34.77499379168766, lng: 135.51212397901585 , password: "yuu1ztCdwsa7W9evhcZG3UmigiZq3mhqX7LNz5SCxeM="},
+    2: { lat: 34.77435822763561, lng: 135.51176280359462, password: "tK9XiYSLNGT++l6Y0gbsEfqZd2CnsfITY4E/mv/lt1c="},
+    3: { lat: 34.774364081650134, lng: 135.51110844565466 , password: "KscGcKqw8M0o/WqlmhPAXtNX20XeBno4M2PgjleLqXI="},
+    4: { lat: 34.77482176055961, lng: 135.51125279706034 , password: "dFHIvy+xliLvvbQOHY72V/IAnLtT8y+AbrvX8W05IXA="},
+    5: { lat: 34.77435822763561, lng: 135.51176280359462, password: "PL91tZoBYdaqmPU/zfF6ubHPnBAuXvqBuOc2KD36nUQ="}
 }
 
 //フロントから取得する情報　lat,lng,stampId,password,frontPublicId ※lat,lngはnullでもよい
@@ -49,8 +50,18 @@ export async function GET() {
 
 export async function POST(req: Request) {
     try {
-        const { lat, lng, stampId,password,frontPublicId } = await req.json()
+        const stampSchema = z.object({
+            lat: z.number().optional(),
+            lng: z.number().optional(),
+            stampId: z.number(),
+            password: z.string(),
+            frontPublicId: z.string()
+        })
         
+        const body = stampSchema.parse(await req.json())
+        
+        const { lat, lng, stampId, password, frontPublicId } = body
+
         const session = await getServerSession(authOptions)
         
         if (!session || !session.user?.publicId) {
@@ -102,8 +113,8 @@ export async function POST(req: Request) {
 
         if (typeof lat === "number" && typeof lng === "number") {
             const distance = getDistance(lat, lng, point.lat, point.lng)
-            //100は仮置き
-            if (distance <= 100) {
+            //500は仮置き
+            if (distance <= 500) {
                 updateData[innerField] = true
             } else {
                 updateData[innerField] = false
