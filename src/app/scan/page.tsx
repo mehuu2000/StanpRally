@@ -36,20 +36,19 @@ export default function ScanPage() {
         maximumAge: 60000         // 60秒以内ならキャッシュを使う
       }
     );
-    setMessage("位置情報を処理しています。これには数十秒かかることがあります...")
+    setMessage("位置情報を処理しています。これには数十秒かかることがあります...(位置情報を許可、またはブロックして下さい。)")
     return () => navigator.geolocation.clearWatch(watchId);
   }, []);
   
   useEffect(() => {
     if (!location) return;
-    setMessage('スタンプ処理中...')
     const doScan = async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const spotParam = urlParams.get('spot');
       const spot = spotParam ? Number(spotParam) : null;
       // const userId = urlParams.get('userId');
       const password = urlParams.get('password');
-  
+      console.log("passwordParam:", password);
       if (!spot || !password) {
         setMessage('URLパラメータが不足しています');
         return;
@@ -87,7 +86,7 @@ export default function ScanPage() {
     };
     
     doScan();
-  }, [location,router]);
+  }, [location, router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

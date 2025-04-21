@@ -15,17 +15,19 @@ function getDistance(lat1: number, lng1: number, lat2: number, lng2: number): nu
     const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
-
+const startDate = new Date('2025-04-23T09:00:00');
+const endDate =new Date('2025-04-24T18:00:00');
 // スタンプ地点情報（仮データ）
-const stampPoints: Record<number, { lat: number, lng: number, password: string|undefined}> = {
-    1: { lat: 34.77499379168766, lng: 135.51212397901585 , password: process.env.QR_Password1},
-    2: { lat: 34.77435822763561, lng: 135.51176280359462, password: process.env.QR_Password2},
-    3: { lat: 34.774364081650134, lng: 135.51110844565466 , password: process.env.QR_Password3},
-    4: { lat: 34.77482176055961, lng: 135.51125279706034 , password: process.env.QR_Password4},
-    5: { lat: 34.77435822763561, lng: 135.51176280359462, password: process.env.QR_Password5}
+const stampPoints: Record<number, { lat: number, lng: number, password: string|undefined,availableAt: Date, expiredAt: Date,}> = {
+    1: { lat: 34.77499379168766, lng: 135.51212397901585 , password: process.env.QR_Password1, expiredAt: startDate, availableAt: endDate},
+    2: { lat: 34.77435822763561, lng: 135.51176280359462, password: process.env.QR_Password2, expiredAt: startDate, availableAt: endDate},
+    3: { lat: 34.774364081650134, lng: 135.51110844565466 , password: process.env.QR_Password3, expiredAt: startDate, availableAt: endDate},
+    4: { lat: 34.77482176055961, lng: 135.51125279706034 , password: process.env.QR_Password4, expiredAt: startDate, availableAt: endDate},
+    5: { lat: 34.77435822763561, lng: 135.51176280359462, password: process.env.QR_Password5, expiredAt: startDate, availableAt: endDate}
 }
 
-//フロントから取得する情報　lat,lng,stampId,password ※lat,lngはnullでもよい
+//フロントから取得する情報　lat,lng,stampId,password ※lat,lngは0でもよい
+
 export async function GET() {
     const session = await getServerSession(authOptions)
     
@@ -57,7 +59,7 @@ export async function POST(req: Request) {
             password: z.string(),
             // frontPublicId: z.string()
         })
-        
+
         const body = stampSchema.parse(await req.json())
         // const { lat, lng, stampId, password, frontPublicId } = body
         const { lat, lng, stampId, password } = body
@@ -71,7 +73,11 @@ export async function POST(req: Request) {
         // if(publicId!=frontPublicId){
         //     return NextResponse.json({ message: "Unauthorized", status: 401 })
         // }
-
+        //有効な時間かチェック
+        const now = new Date();
+        if(now <= startDate || now >= endDate){
+            return NextResponse.json({ message: "Out of time", status: 400 })
+        }
         // 有効なstampIdかチェック
         if (![1, 2, 3, 4, 5].includes(stampId)) {
             return NextResponse.json({ message: "Invalid stampId", status: 400 })
