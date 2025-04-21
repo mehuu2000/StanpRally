@@ -74,10 +74,10 @@ export default function DashboardPage() {
   }
   
   // 未認証の場合、ログインページにリダイレクト
-  if (status === 'unauthenticated') {
-    router.push('/auth');
-    return null;
-  }
+  // if (status === 'unauthenticated') {
+  //   router.push('/auth');
+  //   return null;
+  // }
 
   if (!data?.data?.stamps) {
     return (

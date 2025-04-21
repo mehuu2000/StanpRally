@@ -14,7 +14,7 @@ export async function GET() {
             return new Response("Unauthorized", { status: 401 })
         }
         const email = session.user.email
-        if(email!="test@example.com"){
+        if(email!="test2@example.com"){
             return NextResponse.json({message: "You are Not Allowed User", status: 400 })
         }
         const users = await client.user.findMany({

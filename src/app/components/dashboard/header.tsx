@@ -4,6 +4,8 @@ import React from 'react';
 import { signOut } from 'next-auth/react';
 import { useAuthSession } from '@/app/hooks/useAuthSession';
 import { useStamps } from '@/app/hooks/useStamps';
+import { clearPersistedCache } from '@/app/context/AuthContext';
+import { useQueryClient } from '@tanstack/react-query';
 import { 
   AppBar, 
   Toolbar, 
@@ -16,13 +18,16 @@ import {
 export default function DashboardHeader() {
   const { data: session, clear: clearSession } = useAuthSession();
   const { clear: clearStamps } = useStamps();
+  const queryClient = useQueryClient();
 
   const handleLogout = async () => {
     try {
       // 1. React Queryキャッシュのクリア
       clearSession();
       clearStamps();
-      // queryClient.removeQueries({ queryKey: ['session'] }); // セッションキャッシュ削除
+      clearPersistedCache();
+
+      queryClient.clear();
       
       // 2. Next-Authのログアウト処理
       await signOut({ callbackUrl: '/auth' });
