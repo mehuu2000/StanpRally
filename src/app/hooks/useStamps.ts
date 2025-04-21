@@ -1,7 +1,9 @@
 'use client';
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Stamps } from "@prisma/client";
+import { STAMPS_CACHE_KEY } from '../context/AuthContext';
+import { useEffect } from 'react';
 
 interface StampsResponse {
   data: {
@@ -35,13 +37,24 @@ export function useStamps() {
   const queryClient = useQueryClient();
   
   const query = useQuery<StampsResponse, Error>({
-    queryKey: ['stamps'],
+    queryKey: STAMPS_CACHE_KEY,
     queryFn: fetchStamps,
     staleTime: 30 * 60 * 1000, // 30分間キャッシュ
     gcTime: 60 * 60 * 1000,    // 60分間保持
     refetchOnWindowFocus: false, // ウィンドウフォーカス時に再取得しない
     retry: 1,
+    meta: {
+        source: 'useStamps hook'
+    }
   });
+
+  useEffect(() => {
+    const cachedData = queryClient.getQueryData(STAMPS_CACHE_KEY);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[Stamps] Mount check - Cache state:', 
+        cachedData ? 'キャッシュあり' : 'キャッシュなし');
+    }
+  }, [queryClient]);
   
   // スタンプデータを明示的に更新する関数
   const refreshStamps = async () => {

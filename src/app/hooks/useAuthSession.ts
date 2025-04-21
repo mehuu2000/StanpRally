@@ -3,6 +3,7 @@
 import { getSession } from 'next-auth/react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { AUTH_CACHE_KEY } from '../context/AuthContext';
 
 type SessionStatus = 'loading' | 'authenticated' | 'unauthenticated';
 
@@ -38,7 +39,7 @@ export function useAuthSession() {
     status,
     error,
   } = useQuery({
-    queryKey: SESSION_CACHE_KEY,
+    queryKey: AUTH_CACHE_KEY,
     queryFn: fetchSession,
     staleTime: Infinity, // 手動で無効化するまでキャッシュを使用
     gcTime: 24 * 60 * 60 * 1000, // 24時間キャッシュ保持
@@ -85,7 +86,7 @@ export function useAuthSession() {
   // セッションクリアメソッド(ログアウト用)
   const clear = () => {
     console.log('[Auth] Clearing session cache');
-    queryClient.removeQueries({ queryKey: SESSION_CACHE_KEY });
+    queryClient.removeQueries({ queryKey: AUTH_CACHE_KEY });
   };
 
   if (error) {
