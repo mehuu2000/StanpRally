@@ -59,17 +59,17 @@ export async function middleware(request: NextRequest) {
 
     if (pathname.startsWith('/dashboard')) {
       // ダッシュボードは短めのキャッシュ（プライベート）
-      response.headers.set('Cache-Control', 'private, max-age=60, stale-while-revalidate=600');
+      response.headers.set('Cache-Control', 'private, max-age=300, stale-while-revalidate=600');
       response.headers.set('Vary', 'Cookie, Authorization');
     } else if (pathname.startsWith('/stamps/admin')) {
       // スタンプページは少し長めにキャッシュ可能
-      response.headers.set('Cache-Control', 'private, max-age=120, stale-while-revalidate=1800');
+      response.headers.set('Cache-Control', 'private, max-age=300, stale-while-revalidate=1800');
     } else if (pathname === '/scan') {
       // スキャンページはキャッシュしない
       response.headers.set('Cache-Control', 'no-store');
     } else {
       // その他の認証済みページは中程度のキャッシュ
-      response.headers.set('Cache-Control', 'private, max-age=120, stale-while-revalidate=600');
+      response.headers.set('Cache-Control', 'private, max-age=300, stale-while-revalidate=600');
     }
     
     return response;
