@@ -163,6 +163,7 @@ export default function TopPage() {
                         • キャンパスを楽しく探検しながら文化祭を満喫できます
                     </Typography>
                 </Paper>
+                <p>お問い合わせメールアドレス：bunfes@gmail.com</p>
 
                 {/* フッター */}
                 <Box sx={{ textAlign: 'center', mt: 6, mb: 3, color: '#666' }}>
