@@ -12,15 +12,15 @@ import styles  from '@/app/statics/styles/auth/adminAuth.module.css';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
-interface SignUpProps {
-    form: {
-      name: string;
-      email: string;
-      password: string;
-    };
-    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    setAuthType: (type: string) => void;
-}
+// interface SignUpProps {
+//     form: {
+//       name: string;
+//       email: string;
+//       password: string;
+//     };
+//     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+//     setAuthType: (type: string) => void;
+// }
 
 interface ValidationError {
     code: string;
