@@ -14,7 +14,7 @@ export async function GET() {
             return new Response("Unauthorized", { status: 401 })
         }
         const email = session.user.email
-        if(email!="test2@example.com"){
+        if(email!="xppn772p8xdwt9iq@gmail.com"){
             return NextResponse.json({message: "You are Not Allowed User", status: 400 })
         }
         const users = await client.user.findMany({
@@ -31,7 +31,7 @@ export async function GET() {
         }))
     
         return NextResponse.json({ data ,status:200})
-    } catch (err) {
+    } catch {
         // console.error(err)
         return Response.json({message: "Internal Server Error" ,error:"Internal Server Error", status: 500 })
     }
