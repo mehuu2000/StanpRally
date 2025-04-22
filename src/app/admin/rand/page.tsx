@@ -69,7 +69,7 @@ export default function AdminStampPage() {
     } else {
       fetchFromApi(); // ローカルストレージにデータがない場合はAPIから取得
     }
-  }, [router]);
+  }, [router, session]);
 
   const fetchFromApi = () => {
     setLoading(true)

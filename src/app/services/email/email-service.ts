@@ -2,16 +2,22 @@ import FormData from "form-data"; // form-data v4.0.1
 import Mailgun from "mailgun.js"; // mailgun.js v11.1.0
 
 export type EmailData = {
-  to: string;       // 受信者のメールアドレス
+  to: string | string[];       // 受信者のメールアドレス
   subject: string;  // メールの件名
   html: string;     // メールのHTMLコンテンツ
   text?: string;    // メールのテキストコンテンツ（オプション）
   from?: string;    // 送信者のメールアドレス
 };
+interface MailgunClient {
+  messages: {
+    create: (domain: string, data: any) => Promise<any>;
+  };
+  // 必要に応じて他のプロパティを追加
+}
 
 export class EmailService {
   private sender: string;
-  private mailgun: any;
+  private mailgun: MailgunClient;
   private domain: string;
 
   constructor() {
