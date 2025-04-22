@@ -1,5 +1,4 @@
 'use client';
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '@/app/statics/styles/top.module.css';
 import { Button, Typography, Box, Container, Paper } from '@mui/material';
@@ -9,7 +8,6 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
 export default function TopPage() {
     const router = useRouter();
-    const [isLoading, setIsLoading] = useState(false);
 
     // パンフレットをダウンロードする関数
     const handleDownloadPamphlet = () => {
