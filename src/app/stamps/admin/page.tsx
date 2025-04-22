@@ -17,7 +17,8 @@ export default function AdminStampPage() {
   const [data, setData] = useState<StampWithEmail[]>([])
   const [originalData, setOriginalData] = useState<StampWithEmail[]>([])
   const [loading, setLoading] = useState(true)
-  const [ errorMessage, setErrorMessage] = useState<string>('')
+  const [errorMessage, setErrorMessage] = useState<string>('')
+  const [searchTerm, setSearchTerm] = useState('')
   const router = useRouter()
 
   useEffect(() => {
@@ -41,6 +42,7 @@ export default function AdminStampPage() {
 
   const handleReset = () => {
     setData(originalData)
+    setSearchTerm("")
   }
 
   const handleSort = () => {
@@ -52,6 +54,16 @@ export default function AdminStampPage() {
     setData(sortedData)
   }
 
+  const handleSearch = () => {
+    if (!searchTerm.trim()) {
+      setData(originalData)
+      return
+    }
+    const filteredData = originalData.filter(user => 
+      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    setData(filteredData)
+  }
 
   if (loading) return <p className="p-4">読み込み中...</p>
 
@@ -65,10 +77,22 @@ export default function AdminStampPage() {
         <div className="flex gap-5 pb-5">
           <button 
           onClick={handleReset}
-          className="px-5 py-3 bg-white text-black rounded hover:bg-gray-400">リセット</button>
+          className="px-5 py-2 bg-white text-black rounded border-2 border-gray-soft hover:bg-gray-400">リセット</button>
           <button
           onClick={handleSort}
-          className="px-5 py-3 bg-blue-500 text-white rounded hover:bg-blue-600">ソート</button>
+          className="px-5 py-2 bg-blue-500 text-white rounded border-2 border-gray-soft hover:bg-blue-600">全所持ソート</button>
+        </div>
+        <div className="flex gap-3 pb-5">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-2 py-1 bg-white text-black rounded border-2 border-gray-soft"
+            placeholder="Email検索"
+          />
+          <button
+            onClick={handleSearch}
+            className="px-3 py-1 bg-white text-black rounded border-2 border-gray-soft hover:bg-gray-400">検索</button>
         </div>
         <table className="table-auto border w-full text-sm">
           <thead>
