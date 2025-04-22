@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import client from "@/app/lib/prisma"
+import { error } from "console"
 
 export const dynamic = 'force-dynamic'
 
@@ -64,6 +65,6 @@ export async function GET() {
         return NextResponse.json({ data: result, status: 200 })
     } catch (err) {
         console.error(err)
-        return Response.json({ message: "Internal Server Error", status: 500 })
+        return Response.json({ message: "Internal Server Error", error: "Internal Server Error", status: 500 })
     }
 }

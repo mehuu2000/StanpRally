@@ -16,7 +16,7 @@ export default function AdminStampPage() {
   const router = useRouter()
 
   useEffect(() => {
-    fetch('/api/stamp/admin')
+    fetch('/api/admin/stamps')
       .then(res => res.json())
       .then(res => {
         console.log(res)
