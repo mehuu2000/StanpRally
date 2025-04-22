@@ -136,6 +136,14 @@ export default function AdminStampPage() {
     </div>
   ) : (
         <div className="p-6">
+          {/* admin/stampsに移動 */}
+        <button onClick={() => router.push('/admin/stamps')} className="mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded border border-gray-300">
+          スタンプ管理画面に移動
+        </button>
+        <span className="mx-2"></span>
+        <button onClick={() => router.push('/admin/createUser')} className="mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded border border-gray-300">
+          アカウント作成画面に移動
+        </button>
         <h1 className="text-2xl font-bold mb-4">抽選管理画面</h1>
         <div className="mb-4 p-3 bg-yellow-100 rounded border border-yellow-400">
         <p className="font-semibold">注意事項:</p>

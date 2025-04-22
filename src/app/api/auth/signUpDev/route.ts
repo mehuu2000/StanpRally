@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
+import { sendWelcomeEmail } from '@/app/services/email/notification';
 
 export const dynamic = 'force-dynamic'
 
@@ -15,7 +16,7 @@ export const dynamic = 'force-dynamic'
 */
 
 const signupValideate = z.object({
-    name: z.string().min(3, '名前は2文字以上である必要があります'),
+    name: z.string().min(2, '名前は2文字以上である必要があります'),
     email: z.string()
         .email('有効なメールアドレスを入力してください')
         .refine(
@@ -69,6 +70,16 @@ export async function POST(req: NextRequest) {
     });
 
     console.log('ユーザー登録が成功しました', user);
+    try {
+        // TypeScriptエラーを解消するために明示的な型チェック
+        await sendWelcomeEmail({
+            email: email,
+            name: name
+        });
+        console.log(`確認メールを ${email} に送信しました`);
+    } catch (error) {
+        console.error('確認メール送信中にエラーが発生しました:', error);
+    }
 
     return NextResponse.json({ message: 'ユーザー登録が成功しました', user }, { status: 201 });
 }
