@@ -8,11 +8,17 @@ export default function AdminStampPage() {
   type StampWithEmail = {
     userId: number
     email: string
-    stamps: Stamps
+    stamp1: boolean | null
+    stamp2: boolean | null
+    stamp3: boolean | null
+    stamp4: boolean | null
+    stamp5: boolean | null
   }
   const [data, setData] = useState<StampWithEmail[]>([])
+  const [originalData, setOriginalData] = useState<StampWithEmail[]>([])
   const [loading, setLoading] = useState(true)
-  const [ errorMessage, setErrorMessage] = useState<string>('')
+  const [errorMessage, setErrorMessage] = useState<string>('')
+  const [searchTerm, setSearchTerm] = useState('')
   const router = useRouter()
 
   useEffect(() => {
@@ -29,9 +35,35 @@ export default function AdminStampPage() {
           }, 3000);
         }
         setData(res.data)
+        setOriginalData(res.data)
         setLoading(false)
       })
   }, [])
+
+  const handleReset = () => {
+    setData(originalData)
+    setSearchTerm("")
+  }
+
+  const handleSort = () => {
+    const sortedData = data.filter(user => {
+      return [1, 2, 3, 4, 5].every(i => 
+        user[`stamp${i}` as keyof StampWithEmail] === true
+      )
+    })
+    setData(sortedData)
+  }
+
+  const handleSearch = () => {
+    if (!searchTerm.trim()) {
+      setData(originalData)
+      return
+    }
+    const filteredData = originalData.filter(user => 
+      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    setData(filteredData)
+  }
 
   if (loading) return <p className="p-4">読み込み中...</p>
 
@@ -42,6 +74,26 @@ export default function AdminStampPage() {
   ) : (
         <div className="p-6">
         <h1 className="text-2xl font-bold mb-4">スタンプ管理画面</h1>
+        <div className="flex gap-5 pb-5">
+          <button 
+          onClick={handleReset}
+          className="px-5 py-2 bg-white text-black rounded border-2 border-gray-soft hover:bg-gray-400">リセット</button>
+          <button
+          onClick={handleSort}
+          className="px-5 py-2 bg-blue-500 text-white rounded border-2 border-gray-soft hover:bg-blue-600">全所持ソート</button>
+        </div>
+        <div className="flex gap-3 pb-5">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-2 py-1 bg-white text-black rounded border-2 border-gray-soft"
+            placeholder="Email検索"
+          />
+          <button
+            onClick={handleSearch}
+            className="px-3 py-1 bg-white text-black rounded border-2 border-gray-soft hover:bg-gray-400">検索</button>
+        </div>
         <table className="table-auto border w-full text-sm">
           <thead>
             <tr>
