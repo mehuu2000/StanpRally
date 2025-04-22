@@ -37,7 +37,6 @@ export default function AdminStampPage() {
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [isSending, setIsSending] = useState(false)
   const [sendData, setSendData] = useState<results[]>([])
-  const [dataFetched, setDataFetched] = useState(false)
 
   const router = useRouter()
   const LOCAL_STORAGE_KEY = 'bunfes-raffle-results';
@@ -82,7 +81,6 @@ export default function AdminStampPage() {
         if (res.data && res.data.length > 0) {
           localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(res.data));
           console.log('抽選結果をローカルストレージに保存しました');
-          setDataFetched(true); // 新しいデータを取得したことをマーク
         }
         setLoading(false)
         setErrorMessage(res.error)
