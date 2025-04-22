@@ -8,8 +8,10 @@ export type EmailData = {
   text?: string;    // メールのテキストコンテンツ（オプション）
   from?: string;    // 送信者のメールアドレス
 };
+
 interface MailgunClient {
   messages: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     create: (domain: string, data: any) => Promise<any>;
   };
   // 必要に応じて他のプロパティを追加
