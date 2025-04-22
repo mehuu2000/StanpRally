@@ -1,8 +1,7 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '@/app/statics/styles/top.module.css';
-import Image from 'next/image';
 import { Button, Typography, Box, Container, Paper } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import LoginIcon from '@mui/icons-material/Login';
@@ -17,7 +16,7 @@ export default function TopPage() {
       try {
           // Googleドライブの共有URLからファイルIDを抽出
           const fileId = '1n6oZFc_pNlQHgUBr9XGT3IXczreeGAQe';
-          
+
           const directDownloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
           
           // 新しいウィンドウで開く
