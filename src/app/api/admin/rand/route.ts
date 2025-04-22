@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import client from "@/app/lib/prisma"
-import { error } from "console"
 
 export const dynamic = 'force-dynamic'
 
@@ -56,6 +55,7 @@ export async function GET() {
 
         const result = winners.map((entry, index) => ({
             userId: entry.user.id,
+            name: entry.user.name,
             email: entry.user.email,
             gift: shuffledGifts[index],
             innerTrueCount: [entry.inner1, entry.inner2, entry.inner3, entry.inner4, entry.inner5]
