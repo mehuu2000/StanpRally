@@ -15,8 +15,8 @@ function getDistance(lat1: number, lng1: number, lat2: number, lng2: number): nu
     const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
-const startDate = new Date('2025-04-23T09:00:00');
-const endDate =new Date('2025-04-24T18:00:00');
+const startDate = new Date('2025-04-23T09:00:00+09:00');
+const endDate = new Date('2025-04-24T18:00:00+09:00'); 
 // スタンプ地点情報（仮データ）
 const stampPoints: Record<number, { lat: number, lng: number, password: string|undefined,availableAt: Date, expiredAt: Date,}> = {
     1: { lat: 34.77499379168766, lng: 135.51212397901585 , password: process.env.QR_Password1, expiredAt: startDate, availableAt: endDate},

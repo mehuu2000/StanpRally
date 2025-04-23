@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { Stamps } from "@prisma/client"
 import { useRouter } from 'next/navigation'
 
 export default function AdminStampPage() {
