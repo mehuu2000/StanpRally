@@ -8,17 +8,17 @@ export const metadata: Metadata = {
   title: "Kandai Stamp v1.0.0",
   description: "関大文化フェスティバルスタンプ企画",
   alternates: {
-    canonical: "https://stamprally-two.vercel.app/",
+    canonical: "https://www.bunfes.com/",
   },
-  metadataBase: new URL("https://stamprally-two.vercel.app/"),
+  metadataBase: new URL("https://www.bunfes.com/"),
   openGraph: {
     title: "関大文化フェス",
     siteName: "関大文化フェス",
     type: "website",
-    url:"https://stamprally-two.vercel.app",
+    url:"https://www.bunfes.com/",
     images: [
       {
-        url: "https://stamprally-two.vercel.app/og-image.png",
+        url: "https://www.bunfes.com/og-image.png",
         width: 1200,
         height: 1200,
         alt: "関大文化フェス",
