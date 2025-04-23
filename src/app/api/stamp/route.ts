@@ -31,25 +31,33 @@ const stampPoints: Record<number, { lat: number, lng: number, password: string|u
 //フロントから取得する情報　lat,lng,stampId,password ※lat,lngは0でもよい
 
 export async function GET() {
+    try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session || !session.user?.publicId) {
         return NextResponse.json({ message: "Unauthorized", status: 401 })
     }
     const publicId = session.user.publicId
 
-    const user = await client.user.findUnique({
+    let user = await client.user.findUnique({
         where: { publicId },
         include: { stamps: true }
     })
     if(!user) {
-        return NextResponse.json({ message: "User not found", status: 400 })
+        return NextResponse.json({ data: null,message: "User not found", status: 400 })
     }
     if (!user.stamps) {
         // スタンプレコードがない場合は作成
         await client.stamps.create({ data: { userId: user.id } })
+        user = await client.user.findUnique({
+            where: { publicId },
+            include: { stamps: true }
+        })
     }
     return NextResponse.json({ data: user, status: 200 })
+    }catch {
+        return NextResponse.json({ message: "Unexpected server error" },{ status: 500 })
+    }
 }
 
 export async function POST(req: Request) {
