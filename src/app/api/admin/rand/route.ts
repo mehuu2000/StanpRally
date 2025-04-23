@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import client from "@/app/lib/prisma"
-import { error } from "console"
+// import { error } from "console"
 
 export const dynamic = 'force-dynamic'
 
