@@ -21,11 +21,11 @@ const startDate = new Date('2025-04-23T09:00:00+09:00');
 const endDate = new Date('2025-04-24T18:00:00+09:00'); 
 // スタンプ地点情報（仮データ）
 const stampPoints: Record<number, { lat: number, lng: number, password: string|undefined,availableAt: Date, expiredAt: Date,}> = {
-    1: { lat: 34.77499379168766, lng: 135.51212397901585 , password: process.env.QR_Password1, expiredAt: startDate, availableAt: endDate},
-    2: { lat: 34.77435822763561, lng: 135.51176280359462, password: process.env.QR_Password2, expiredAt: startDate, availableAt: endDate},
-    3: { lat: 34.774364081650134, lng: 135.51110844565466 , password: process.env.QR_Password3, expiredAt: startDate, availableAt: endDate},
-    4: { lat: 34.77482176055961, lng: 135.51125279706034 , password: process.env.QR_Password4, expiredAt: startDate, availableAt: endDate},
-    5: { lat: 34.77435822763561, lng: 135.51176280359462, password: process.env.QR_Password5, expiredAt: startDate, availableAt: endDate}
+    1: { lat: 34.77499379168766, lng: 135.51212397901585 , password: process.env.QR_Password1, expiredAt: endDate, availableAt: startDate},
+    2: { lat: 34.77435822763561, lng: 135.51176280359462, password: process.env.QR_Password2, expiredAt: endDate, availableAt: startDate},
+    3: { lat: 34.774364081650134, lng: 135.51110844565466 , password: process.env.QR_Password3, expiredAt: endDate, availableAt: startDate},
+    4: { lat: 34.77482176055961, lng: 135.51125279706034 , password: process.env.QR_Password4, expiredAt: endDate, availableAt: startDate},
+    5: { lat: 34.77435822763561, lng: 135.51176280359462, password: process.env.QR_Password5, expiredAt: endDate, availableAt: startDate}
 }
 
 //フロントから取得する情報　lat,lng,stampId,password ※lat,lngは0でもよい
@@ -46,13 +46,17 @@ export async function GET() {
     if(!user) {
         return NextResponse.json({ data: null,message: "User not found", status: 400 })
     }
-    if (!user.stamps) {
-        // スタンプレコードがない場合は作成
-        await client.stamps.create({ data: { userId: user.id } })
-        user = await client.user.findUnique({
-            where: { publicId },
-            include: { stamps: true }
-        })
+    try {
+        if (!user.stamps) {
+            // スタンプレコードがない場合は作成
+            await client.stamps.create({ data: { userId: user.id } })
+            user = await client.user.findUnique({
+                where: { publicId },
+                include: { stamps: true }
+            })
+        }
+    }catch{
+        return NextResponse.json({ message: "Stamps recreate missing", status: 500 })
     }
     return NextResponse.json({ data: user, status: 200 })
     }catch {

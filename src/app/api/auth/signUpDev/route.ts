@@ -66,6 +66,11 @@ export async function POST(req: NextRequest) {
             name,
             email,
             hashedPassword,
+            stamps: {
+                create: {
+                    updatedAt: new Date(),
+                }
+            }
         },
     });
 
