@@ -153,11 +153,11 @@ function SignUpComponen() {
     return (
         <div className={styles.authContainer}>
             <div>
-            <button onClick={() => router.push('/admin/stamps')} className="mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded border border-gray-300">
+            <button onClick={() => router.push('/admin/stamps')} className="mb-4 bg-gray-200 text-black hover:bg-gray-300 px-4 py-2 rounded border border-gray-300">
                 スタンプ管理画面に移動
             </button>
             <span className="mx-2"></span>
-            <button onClick={() => router.push('/admin/rand')} className="mb-4 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded border border-gray-300">
+            <button onClick={() => router.push('/admin/rand')} className="mb-4 bg-gray-200 text-black hover:bg-gray-300 px-4 py-2 rounded border border-gray-300">
                 抽選管理画面に移動
             </button>
             </div>

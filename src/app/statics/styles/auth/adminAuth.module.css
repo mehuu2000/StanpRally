@@ -9,6 +9,7 @@
 
 .authHeader {
     padding: 20px;
-    border: 1px solid #f67331;
+    border: 2px solid #f67331;
     border-radius: 20px;
+    background-color: white;
 }
