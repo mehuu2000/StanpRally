@@ -6,6 +6,8 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/lib/nextAuth"
 import { z } from "zod"
 
+export const dynamic = 'force-dynamic'
+
 const R = 6371e3 // 地球半径（メートル）
 
 function getDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
