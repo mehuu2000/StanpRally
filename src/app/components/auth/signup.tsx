@@ -59,7 +59,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 const visitorIdentifier = result.visitorId;
                 console.log('visitorIdを生成:', visitorIdentifier);
                 setVisitorId(visitorIdentifier);
-                
+
                 // デバイスUUID用のCookieを確認
                 const existingCookie = Cookies.get(COOKIE_ID);
                 if (existingCookie) {
@@ -77,7 +77,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 setDeviceReady(true); // エラーでも処理は続行できるようにする
             }
         }
-        
+
         initDevice();
     }, []);
 
@@ -91,7 +91,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
             setError('デバイス情報を準備中です。しばらくお待ちください。');
             return;
         }
-        
+
         setIsLoading(true);
         setError('');
         setErrorMail('');
@@ -116,25 +116,24 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 newCookieUUID     // 新たに生成したUUID (あれば)
               }),
             });
-      
             const data = await response.json();
-      
+
             if (!response.ok) {
                 console.log(data.message || 'アカウント作成に失敗しました');
-              
+
                 // エラー処理
                 if (data.error && Array.isArray(data.error)) {
                   // 全てのエラーメッセージをリセット
                   setErrorMail('');
                   setErrorPassword('');
                   setErrorName('');
-                  
+
                   // 各エラーを適切なフィールドに割り当てる
                   data.error.forEach((err: ValidationError) => {
                     if (err.path && err.path.length > 0) {
                       const fieldName = err.path[0];
                       const errorMessage = err.message;
-                      
+
                       switch (fieldName) {
                         case 'email':
                           setErrorMail(errorMessage);
@@ -147,8 +146,8 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                           break;
                         default:
                           // 未知のフィールドのエラーは一般エラーとして表示
-                          setError(prevError => prevError 
-                            ? `${prevError}\n${errorMessage}` 
+                          setError(prevError => prevError
+                            ? `${prevError}\n${errorMessage}`
                             : errorMessage);
                       }
                     }
@@ -171,7 +170,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 });
                 console.log('新しいUUIDをCookieに保存:', newCookieUUID);
               }
-              
+
               // 成功したら2秒後にログインページにリダイレクト
               setTimeout(() => {
                 setAuthType('login');
@@ -192,7 +191,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
             {success && <Alert severity="success" className="mb-4" sx={{ backgroundColor: '#ffedd5', color: '#9a3412' }}>
                 {success}
             </Alert>}
-            
+
             <TextField
                 fullWidth
                 required
@@ -223,7 +222,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                     },
                 }}
             />
-            
+
             <TextField
                 fullWidth
                 required
@@ -265,7 +264,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                     },
                 }}
             />
-            
+
             <TextField
                 fullWidth
                 required
@@ -296,7 +295,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                     },
                 }}
             />
-            
+
             <Box className="pt-2">
                 <Button
                     type="submit"

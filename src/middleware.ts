@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
+import { authSecret } from '@/lib/authSecret';
 
 // キャッシュ設定
 export const runtime = 'experimental-edge';
@@ -32,7 +33,7 @@ export async function middleware(request: NextRequest) {
     // authパスのみ特別処理（認証済みならダッシュボードへ）
     if (pathname === authPath) {
       try {
-        const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+        const token = await getToken({ req: request, secret: authSecret });
         if (token) {
           return NextResponse.redirect(new URL('/dashboard', request.url));
         }
@@ -49,7 +50,7 @@ export async function middleware(request: NextRequest) {
   
   // 認証が必要なパスのみトークン検証
   try {
-    const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+    const token = await getToken({ req: request, secret: authSecret });
     
     if (!token) {
       const url = new URL(authPath, request.url);

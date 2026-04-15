@@ -1,5 +1,8 @@
-### 目次
-- 初めに
+# 文化フェスティバル　スタンプラリー
+
+## 目次
+
+- 概要
 - 初回セットアップ
 - ライブラリの追加
 - 新しい要素を追加する(コードを書く)場合
@@ -7,17 +10,19 @@
 
 ----
 
-### 初めに
+### 概要
 
-**.envがないので、各自で設定することになります。**
-
-必要そうなコマンドはMakefileに登録しているので、確認しておいてください
-
-**必要なコマンドがなければ各自追加しておいてください**
+関西大学文化会本部の広報部長の方からVersearへ制作の依頼を受けたので作成しています。
+このスタンプラリーサイトは、文化フェスティバルの参加促進キャンペーンの一環です。
+文化フェスティバルとは文化会に所属する団体が日々の成果を発表するイベントとなります。
 
 ----
 
 ### 初回セットアップ
+
+**.envがないので、各自で設定することになります。**
+
+.env作成は.env.exampleを参考にしてください
 
 任意のブランチで
 
@@ -29,6 +34,8 @@ git clone https://github.com/mehuu2000/StanpRally.git
 
 ```sh
 npm ci
+npx prisma migrate dev
+npm run dev
 ```
 
 .envを設定
@@ -44,7 +51,7 @@ make [mack, win, linux]-app  #各自のOSで[]内を変えてください
 これでブラウザが開かれるので確認してください
 >開かない場合は```http://localhost:3000```で開いてください
 
----
+----
 
 ### ライブラリの追加
 
@@ -68,29 +75,33 @@ npm install ???
 **developから**
 
 ```sh
-git checkout -b future/〇〇  #新しいブランチを作成
+git checkout -b feature/〇〇  #新しいブランチを作成
+or
+git switch -c feature/〇〇
 ```
 
-#### 編集が終わると
+### 編集が終わると
 
 ```sh
 git add .
 ```
 
 ```sh
-git commit -m "⬜︎⬜︎"
+git commit -m "コミットメッセージ（どのような作業をしたか書く）"
 ```
 
 ```sh
-git puch origin future/〇〇
+git puch origin feature/〇〇
 ```
 
 ```sh
 git checkout develop  #developブランチに移動
+or
+git switch develop
 ```
 
 ```sh
-git merge --squash future/〇〇  #developブランチにfuture/〇〇の変更を追加
+git merge --squash feature/〇〇  #developブランチにfeature/〇〇の変更を追加
 ```
 
 ```sh
@@ -110,7 +121,7 @@ git stash  #変更を一時保存
 ```
 
 ```sh
-git checkout -b future/〇〇  #変更を置くブランチを作成&移動
+git checkout -b feature/〇〇  #変更を置くブランチを作成&移動
 ```
 
 ```sh
@@ -123,7 +134,7 @@ git stash pop  #一時保存の変更を反映
 
 ----
 
-### 変更を取り込むとき
+#### 変更を取り込むとき
 
 ```sh
 git add .
@@ -134,7 +145,7 @@ git commit "一時保存"  #避難している感じで分かればいい
 ```
 
 ```sh
-git push origin future/〇〇  #変更を加えたブランチを避難
+git push origin feature/〇〇  #変更を加えたブランチを避難
 ```
 
 ```sh
@@ -154,12 +165,13 @@ git merge origin/取り込むブランチ名  #変更を取り込む
 ----
 
 ### 環境について
+
 今回大学のwifiではsupabaseに通信できません。また、supabaseもリソースに制限があるため、ローカルでも動くように環境を二つ作りました。
 
 本番に近い通信
 
 ```
-next.js(docekr) + supabase
+next.js(docker) + supabase
 ```
 
 起動方法などは普通のmakeコマンド
@@ -167,13 +179,12 @@ next.js(docekr) + supabase
 開発用の環境
 
 ```
-next.js(docekr) + postgreSQL(docker)
+next.js(docker) + postgreSQL(docker)
 ```
 
 起動方法などはまず、project/prisma/schema.prismaのurlをLocal_DATABASE_URLに切り替えておく
 
 今まで使ってきたmakeコマンドの一番後ろに```-local```をつけ環境を起動
-
 
 prisma/migrationsがない場合は
 
@@ -182,11 +193,9 @@ npx prisma migrate dev --name init
 ```
 
 ある場合は
+
 ```sh
 npx prisma migrate deploy
 ```
 
 とすること
-
-
-
