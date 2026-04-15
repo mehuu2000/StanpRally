@@ -24,36 +24,33 @@
 
 .env作成は.env.exampleを参考にしてください
 
-任意のブランチで
-
 ```sh
-git clone https://github.com/mehuu2000/StanpRally.git
+git clone git@github.com:fuji-byte/StampRally.git
+
+cd StampRally
+
+npm ci # エラーがでたら npm audit fix
+npx prisma generate
 ```
 
-プロジェクトディレクトリに移動
+ローカル環境で実行する場合（おすすめ）
 
 ```sh
-npm ci
-npx prisma migrate dev
-npm run dev
+npm run dev # ローカル環境はここでセットアップ・実行完了
 ```
 
-.envを設定
+docker環境で実行する場合
 
 ```sh
 make init
 ```
 
 ```sh
-make [mack, win, linux]-app  #各自のOSで[]内を変えてください
+make [mack, win, linux]-app  # 各自のOSで[]内を変えてください
 ```
 
 これでブラウザが開かれるので確認してください
 >開かない場合は```http://localhost:3000```で開いてください
-
-----
-
-### ライブラリの追加
 
 ```sh
 make app
@@ -70,62 +67,98 @@ npm install ???
 
 ----
 
-### 新しい要素を追加する(コードを書く)場合
+### GitHubのすすめ
 
-**developから**
+#### GitHub上の最新の情報を持ってくる(作業を始める時に実行する)
+
+編集しているものがある場合
 
 ```sh
-git checkout -b feature/〇〇  #新しいブランチを作成
+git add .
+git commit -m "コミットメッセージ"
+```
+
+GitHub上の最新の情報を反映
+
+```sh
+git pull # GitHubから現在のブランチの最新の情報を引っ張ってくる(ローカルに影響はない)
+git merge origin/feature/〇〇 # リモートブランチ origin/feature/〇〇 の変更履歴を、現在のブランチに統合（マージ）する
+```
+
+イメージ
+リモート feature/oo
+     ↓　--- 上はリモート、下はローカル
+origin/feature/oo ← ★git pullで更新
+     ↓
+現在のブランチ ← ★git mergeで更新
+
+tips git pullした直後、diffを見るコマンド
+
+```sh
+git diff --name-status 自分のブランチ名 origin/取り込むブランチ名  # 差分が簡単に見れる
+```
+
+コンフリクトが起きた時
+diffを見ながら編集。もしくは、ディスコードなどで相談する。
+
+#### 新しい機能を実装する場合（新しく作業を始めるとき）
+
+①**developブランチになっているか確認**
+
+```sh
+git branch -l
+   main
+*  develop <- *がついているので、いまdevelopブランチ
+```
+
+developブランチでない場合
+
+```sh
+git switch develop
+```
+
+②新しく作業ブランチを作成
+
+```sh
+git checkout -b feature/〇〇  # 新しいブランチを作成(どのような機能か〇〇に)
 or
 git switch -c feature/〇〇
 ```
 
-### 編集が終わると
+#### 新しい機能が実装出来たら
 
 ```sh
-git add .
+git add . # ここの.はすべてのファイルという意味
 ```
 
 ```sh
 git commit -m "コミットメッセージ（どのような作業をしたか書く）"
 ```
 
+ここで初めてGitHub上にアップロードする
+
 ```sh
-git puch origin feature/〇〇
+git push origin feature/〇〇 # 作業したブランチ名
 ```
 
 ```sh
-git checkout develop  #developブランチに移動
+git checkout develop  # developブランチに移動
 or
 git switch develop
 ```
 
-```sh
-git merge --squash feature/〇〇  #developブランチにfeature/〇〇の変更を追加
-```
-
-```sh
-git commit -m "⬜︎⬜︎"  #追加した変更にコメントを設定
-```
-
-```sh
-git push origin develop  #developに適応
-```
-
-するのがいいかなと思います。
-
 #### もしmainやdevelopで開発しちゃった！といった時は
 
 ```sh
-git stash  #変更を一時保存
+git stash  # 変更を一時保存
 ```
 
 ```sh
-git checkout -b feature/〇〇  #変更を置くブランチを作成&移動
+git checkout -b feature/〇〇  # 変更を置くブランチを作成&移動
 ```
 
 ```sh
-git stash pop  #一時保存の変更を反映
+git stash pop  # 一時保存の変更を反映
 ```
 
 で、できます
@@ -134,53 +167,19 @@ git stash pop  #一時保存の変更を反映
 
 ----
 
-#### 変更を取り込むとき
-
-```sh
-git add .
-```
-
-```sh
-git commit "一時保存"  #避難している感じで分かればいい
-```
-
-```sh
-git push origin feature/〇〇  #変更を加えたブランチを避難
-```
-
-```sh
-git fetch origin 〇〇  #他の人がpushしたブランチ
-```
-
-```sh
-git diff --name-status 自分のブランチ名 origin/取り込むブランチ名  #差分が簡単に見れる
-```
-
-```sh
-git merge origin/取り込むブランチ名  #変更を取り込む
-```
-
-コンフリクトが起こるかもなので、起きたら頑張りましょう
-
-----
-
 ### 環境について
 
-今回大学のwifiではsupabaseに通信できません。また、supabaseもリソースに制限があるため、ローカルでも動くように環境を二つ作りました。
+今回大学のWi-Fiではsupabaseに通信できません。また、supabaseもリソースに制限があるため、ローカルでも動くように環境を二つ作りました。
 
 本番に近い通信
 
-```
 next.js(docker) + supabase
-```
 
 起動方法などは普通のmakeコマンド
 
 開発用の環境
 
-```
 next.js(docker) + postgreSQL(docker)
-```
 
 起動方法などはまず、project/prisma/schema.prismaのurlをLocal_DATABASE_URLに切り替えておく
 
