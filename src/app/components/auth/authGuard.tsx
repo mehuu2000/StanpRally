@@ -44,7 +44,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     return (
         <Box className="flex justify-center items-center min-h-screen">
             <CircularProgress sx={{ color: '#f97316' }} />
-            <Typography className="ml-3 text-orange-600">読み込み中...</Typography>
+            <Typography className="ml-3 text-pink-600">読み込み中...</Typography>
         </Box>
     );
   }

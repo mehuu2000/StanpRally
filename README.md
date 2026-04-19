@@ -153,7 +153,7 @@ GitHubを開き、Pull requestsに移動
 
 New pull requestをクリック
 
-base: main <- compare: feature/〇〇 # マージしたいブランチ名
+base: main <- compare: feature/〇〇 # マージしたいブランチ名 base repositoryがmehuu...になっていないか確認
 
 create pull request
 
