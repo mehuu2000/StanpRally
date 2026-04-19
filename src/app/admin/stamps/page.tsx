@@ -64,31 +64,6 @@ export default function AdminStampPage() {
     setData(filteredData)
   }
 
-  const handleReset = () => {
-    setData(originalData)
-    setSearchTerm("")
-  }
-
-  const handleSort = () => {
-    const sortedData = data.filter(user => {
-      return [1, 2, 3, 4, 5].every(i => 
-        user[`stamp${i}` as keyof StampWithEmail] === true
-      )
-    })
-    setData(sortedData)
-  }
-
-  const handleSearch = () => {
-    if (!searchTerm.trim()) {
-      setData(originalData)
-      return
-    }
-    const filteredData = originalData.filter(user => 
-      user.email.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    setData(filteredData)
-  }
-
   if (loading) return <p className="p-4">読み込み中...</p>
 
   return errorMessage ? (
