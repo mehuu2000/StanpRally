@@ -2,6 +2,7 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs'
 import prisma from "@/app/lib/prisma";
+import { authSecret } from "@/lib/authSecret";
 
 export const dynamic = 'force-dynamic'
 
@@ -76,7 +77,7 @@ export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt",
     },
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: authSecret,
     callbacks: {
         async jwt({ token, user }) {
             if (user) {

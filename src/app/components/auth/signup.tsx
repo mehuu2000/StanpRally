@@ -59,7 +59,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 const visitorIdentifier = result.visitorId;
                 console.log('visitorIdを生成:', visitorIdentifier);
                 setVisitorId(visitorIdentifier);
-                
+
                 // デバイスUUID用のCookieを確認
                 const existingCookie = Cookies.get(COOKIE_ID);
                 if (existingCookie) {
@@ -77,7 +77,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 setDeviceReady(true); // エラーでも処理は続行できるようにする
             }
         }
-        
+
         initDevice();
     }, []);
 
@@ -91,7 +91,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
             setError('デバイス情報を準備中です。しばらくお待ちください。');
             return;
         }
-        
+
         setIsLoading(true);
         setError('');
         setErrorMail('');
@@ -116,25 +116,24 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 newCookieUUID     // 新たに生成したUUID (あれば)
               }),
             });
-      
             const data = await response.json();
-      
+
             if (!response.ok) {
                 console.log(data.message || 'アカウント作成に失敗しました');
-              
+
                 // エラー処理
                 if (data.error && Array.isArray(data.error)) {
                   // 全てのエラーメッセージをリセット
                   setErrorMail('');
                   setErrorPassword('');
                   setErrorName('');
-                  
+
                   // 各エラーを適切なフィールドに割り当てる
                   data.error.forEach((err: ValidationError) => {
                     if (err.path && err.path.length > 0) {
                       const fieldName = err.path[0];
                       const errorMessage = err.message;
-                      
+
                       switch (fieldName) {
                         case 'email':
                           setErrorMail(errorMessage);
@@ -147,8 +146,8 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                           break;
                         default:
                           // 未知のフィールドのエラーは一般エラーとして表示
-                          setError(prevError => prevError 
-                            ? `${prevError}\n${errorMessage}` 
+                          setError(prevError => prevError
+                            ? `${prevError}\n${errorMessage}`
                             : errorMessage);
                       }
                     }
@@ -171,7 +170,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 });
                 console.log('新しいUUIDをCookieに保存:', newCookieUUID);
               }
-              
+
               // 成功したら2秒後にログインページにリダイレクト
               setTimeout(() => {
                 setAuthType('login');
@@ -189,10 +188,10 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             {error && <Alert severity="error" className="mb-4">{error}</Alert>}
-            {success && <Alert severity="success" className="mb-4" sx={{ backgroundColor: '#ffedd5', color: '#9a3412' }}>
+            {success && <Alert severity="success" className="mb-4" sx={{ backgroundColor: '#fef9fb', color: '#ec3b83' }}>
                 {success}
             </Alert>}
-            
+
             <TextField
                 fullWidth
                 required
@@ -207,7 +206,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
-                            <EmailIcon className="text-orange-400" />
+                            <EmailIcon className="text-pink-400" />
                         </InputAdornment>
                     ),
                 }}
@@ -215,15 +214,15 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 sx={{
                     '& .MuiOutlinedInput-root': {
                         '&.Mui-focused fieldset': {
-                            borderColor: '#f97316',
+                            borderColor: '#ff1493',
                         },
                     },
                     '& .MuiInputLabel-root.Mui-focused': {
-                        color: '#f97316',
+                        color: '#ff1493',
                     },
                 }}
             />
-            
+
             <TextField
                 fullWidth
                 required
@@ -238,7 +237,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
-                            <LockIcon className="text-orange-400" />
+                            <LockIcon className="text-pink-400" />
                         </InputAdornment>
                     ),
                     endAdornment: (
@@ -246,7 +245,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                             <IconButton
                                 onClick={handleClickShowPassword}
                                 edge="end"
-                                className="text-gray-500 hover:text-orange-500"
+                                className="text-gray-500 hover:text-pink-500"
                             >
                                 {showPassword ? <VisibilityOff /> : <Visibility />}
                             </IconButton>
@@ -257,15 +256,15 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 sx={{
                     '& .MuiOutlinedInput-root': {
                         '&.Mui-focused fieldset': {
-                            borderColor: '#f97316',
+                            borderColor: '#ff1493',
                         },
                     },
                     '& .MuiInputLabel-root.Mui-focused': {
-                        color: '#f97316',
+                        color: '#ff1493',
                     },
                 }}
             />
-            
+
             <TextField
                 fullWidth
                 required
@@ -280,7 +279,7 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
-                            <PersonIcon className="text-orange-400" />
+                            <PersonIcon className="text-pink-400" />
                         </InputAdornment>
                     ),
                 }}
@@ -288,26 +287,26 @@ function SignUpComponent({ form, handleChange, setAuthType }: SignUpProps) {
                 sx={{
                     '& .MuiOutlinedInput-root': {
                         '&.Mui-focused fieldset': {
-                            borderColor: '#f97316',
+                            borderColor: '#ff1493',
                         },
                     },
                     '& .MuiInputLabel-root.Mui-focused': {
-                        color: '#f97316',
+                        color: '#ff1493',
                     },
                 }}
             />
-            
+
             <Box className="pt-2">
                 <Button
                     type="submit"
                     fullWidth
                     variant="contained"
                     disabled={isLoading || !deviceReady}
-                    className="bg-orange-500 hover:bg-orange-600 py-3 normal-case text-base font-medium"
+                    className="bg-pink-500 hover:bg--600 py-3 normal-case text-base font-medium"
                     sx={{
-                        backgroundColor: '#f97316',
+                        backgroundColor: '#ff1493',
                         '&:hover': {
-                            backgroundColor: '#ea580c',
+                            backgroundColor: '#ed6ea0',
                         },
                     }}
                 >

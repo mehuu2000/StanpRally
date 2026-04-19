@@ -1,12 +1,9 @@
-// app/api/stamp/admin/route.ts
-
 import { NextResponse } from "next/server"
 import client from "@/app/lib/prisma"
 import { User, Stamps } from "@prisma/client"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/lib/nextAuth"
 
-//一時的に誰でも確認できるようになっている
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
@@ -17,7 +14,7 @@ export async function GET() {
             return new Response("Unauthorized", { status: 401 })
         }
         const email = session.user.email
-        if(email!="test2@example.com"){
+        if(email!="xppn772p8xdwt9iq@gmail.com"){
             return NextResponse.json({message: "You are Not Allowed User", status: 400 })
         }
         const users = await client.user.findMany({
@@ -34,8 +31,8 @@ export async function GET() {
         }))
     
         return NextResponse.json({ data ,status:200})
-    } catch (err) {
-        console.error(err)
-        return Response.json({message: "Internal Server Error", status: 500 })
+    } catch {
+        // console.error(err)
+        return Response.json({message: "Internal Server Error" ,error:"Internal Server Error", status: 500 })
     }
 }
