@@ -172,7 +172,7 @@ function SignUpComponen() {
                     <TextField
                         fullWidth
                         required
-                        label=""
+                        label="メールアドレス"
                         type="email"
                         name="email"
                         value={form.email}
