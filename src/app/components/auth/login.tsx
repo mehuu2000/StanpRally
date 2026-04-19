@@ -3,7 +3,7 @@
 import React from 'react'
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { TextField, Button, InputAdornment, IconButton, Alert, Box, CircularProgress } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
@@ -22,7 +22,8 @@ function LoginComponent({ form, handleChange }: LoginProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const router = useRouter();
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -34,12 +35,12 @@ function LoginComponent({ form, handleChange }: LoginProps) {
                 email: form.email,
                 password: form.password,
                 redirect: false,
+                callbackUrl,
             });
-            
+
             if (response?.ok) {
                 console.log('ログイン成功:', response);
-                router.push('/dashboard'); // リダイレクト先を/dashboardに変更
-                router.refresh(); // セッション状態を更新
+                window.location.replace(response.url ?? callbackUrl);
             } else {
                 setError('メールアドレスまたはパスワードが正しくありません');
             }
@@ -58,7 +59,7 @@ function LoginComponent({ form, handleChange }: LoginProps) {
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             {error && <Alert severity="error" className="mb-4">{error}</Alert>}
-            
+
             <TextField
                 fullWidth
                 required
@@ -87,7 +88,7 @@ function LoginComponent({ form, handleChange }: LoginProps) {
                     },
                 }}
             />
-            
+
             <TextField
                 fullWidth
                 required
@@ -127,7 +128,7 @@ function LoginComponent({ form, handleChange }: LoginProps) {
                     },
                 }}
             />
-            
+
             <Box className="pt-2">
                 <Button
                     type="submit"

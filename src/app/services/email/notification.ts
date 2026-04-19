@@ -12,7 +12,7 @@ export async function sendWelcomeEmail(user: { email: string; name: string }): P
         <p>このメールアドレス（${user.email}）で登録が完了しました。</p>
         <p>何か質問やサポートが必要な場合は、以下のメールアドレスからお気軽にお問い合わせください。</p>
         <p>お問い合わせ <a href="mailto:${contactEmail}" style="color: #007bff; text-decoration: underline;">${contactEmail}</a></p>
-        <p>文化フェスティバル2025運営チーム</p>
+        <p>文化フェスティバル2026運営チーム</p>
         <p>自動送信です。このメールに返信しないでください。</p>
       </div>
     `;
@@ -28,13 +28,13 @@ export async function sendWelcomeEmail(user: { email: string; name: string }): P
 何か質問やサポートが必要な場合は、お気軽にお問い合わせください。
 お問い合わせ: ${contactEmail}
 
-文化フェスティバル2025運営チーム
+文化フェスティバル2026運営チーム
 自動送信です。このメールに返信しないでください。
     `;
     
     return await emailService.sendEmail({
       to: user.email,
-      subject: '文化フェス2025 スタンプラリー - アカウント登録完了',
+      subject: '文化フェス2026 スタンプラリー - アカウント登録完了',
       html,
       text,
     });
