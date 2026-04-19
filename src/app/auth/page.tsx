@@ -30,7 +30,7 @@ export default function AuthPage() {
           <Typography
             variant="h5"
             component="h1"
-            className="text-center mb-2 font-bold text-orange-600"
+            className="text-center mb-2 font-bold text-pink-600"
           >
             {authType === "login" ? "デジタルスタンプラリー" : "新規登録"}
           </Typography>
