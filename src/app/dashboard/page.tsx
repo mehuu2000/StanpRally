@@ -82,7 +82,7 @@ export default function DashboardPage() {
           <Box className="flex items-center justify-between">
             <Box>
               <div className="text-sm mb-2">
-                2025文化フェスティバル
+                2026文化フェスティバル
               </div>
               <div className="text-lg font-bold mb-2">
                 デジタルスタンプラリー
