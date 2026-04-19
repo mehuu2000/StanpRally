@@ -165,7 +165,7 @@ function SignUpComponen() {
             <div className={styles.authHeader}>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {error && <Alert severity="error" className="mb-4">{error}</Alert>}
-                    {success && <Alert severity="success" className="mb-4" sx={{ backgroundColor: '#ffedd5', color: '#9a3412' }}>
+                    {success && <Alert severity="success" className="mb-4" sx={{ backgroundColor: '#ffcccb', color: '#ff1493' }}>
                         {success}
                     </Alert>}
                     
@@ -183,7 +183,7 @@ function SignUpComponen() {
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <EmailIcon className="text-orange-400" />
+                                    <EmailIcon className="text-pink-400" />
                                 </InputAdornment>
                             ),
                         }}
@@ -191,11 +191,11 @@ function SignUpComponen() {
                         sx={{
                             '& .MuiOutlinedInput-root': {
                                 '&.Mui-focused fieldset': {
-                                    borderColor: '#f97316',
+                                    borderColor: '#ff1493',
                                 },
                             },
                             '& .MuiInputLabel-root.Mui-focused': {
-                                color: '#f97316',
+                                color: '#ff1493',
                             },
                         }}
                     />
@@ -214,7 +214,7 @@ function SignUpComponen() {
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <LockIcon className="text-orange-400" />
+                                    <LockIcon className="text-pink-400" />
                                 </InputAdornment>
                             ),
                             endAdornment: (
@@ -222,7 +222,7 @@ function SignUpComponen() {
                                     <IconButton
                                         onClick={handleClickShowPassword}
                                         edge="end"
-                                        className="text-gray-500 hover:text-orange-500"
+                                        className="text-gray-500 hover:text-pink-500"
                                     >
                                         {showPassword ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
@@ -233,11 +233,11 @@ function SignUpComponen() {
                         sx={{
                             '& .MuiOutlinedInput-root': {
                                 '&.Mui-focused fieldset': {
-                                    borderColor: '#f97316',
+                                    borderColor: '#ff1493',
                                 },
                             },
                             '& .MuiInputLabel-root.Mui-focused': {
-                                color: '#f97316',
+                                color: '#ff1493',
                             },
                         }}
                     />
@@ -256,7 +256,7 @@ function SignUpComponen() {
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <PersonIcon className="text-orange-400" />
+                                    <PersonIcon className="text-pink-400" />
                                 </InputAdornment>
                             ),
                         }}
@@ -264,11 +264,11 @@ function SignUpComponen() {
                         sx={{
                             '& .MuiOutlinedInput-root': {
                                 '&.Mui-focused fieldset': {
-                                    borderColor: '#f97316',
+                                    borderColor: '#ff1493',
                                 },
                             },
                             '& .MuiInputLabel-root.Mui-focused': {
-                                color: '#f97316',
+                                color: '#ff1493',
                             },
                         }}
                     />
@@ -279,11 +279,11 @@ function SignUpComponen() {
                             fullWidth
                             variant="contained"
                             disabled={isLoading}
-                            className="bg-orange-500 hover:bg-orange-600 py-3 normal-case text-base font-medium"
+                            className="bg-pink-500 hover:bg-pink-600 py-3 normal-case text-base font-medium"
                             sx={{
-                                backgroundColor: '#f97316',
+                                backgroundColor: '#ff1493',
                                 '&:hover': {
-                                    backgroundColor: '#ea580c',
+                                    backgroundColor: '#ed6ea0',
                                 },
                             }}
                         >
