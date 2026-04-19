@@ -24,8 +24,8 @@ function getDistance(
     Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
-const startDate = new Date("2026-04-23T00:00:00+09:00");
-const endDate = new Date("2026-04-24T00:00:00+09:00");
+const startDate = new Date("2026-04-21T00:00:00+09:00");
+const endDate = new Date("2026-04-23T23:59:59+09:00");
 // スタンプ地点情報（仮データ）
 const stampPoints: Record<
   number,
