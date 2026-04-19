@@ -56,11 +56,19 @@ export default function DashboardPage() {
 
     fetchStamps();
   }, []);
+
+  // render中にrouter.push()を呼ばないようuseEffectにする
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/auth");
+    }
+  }, [status, router]);
+
   // セッションの読み込み中
   if (status === "loading" || loading == true) {
     return (
       <Box className="flex justify-center items-center min-h-screen">
-        <CircularProgress sx={{ color: '#ff1493' }} />
+        <CircularProgress sx={{ color: "#ff1493" }} />
         <Typography className="ml-3 text--600">読み込み中...</Typography>
       </Box>
     );
@@ -68,7 +76,6 @@ export default function DashboardPage() {
 
   // 未認証の場合、ログインページにリダイレクト
   if (status === "unauthenticated") {
-    router.push("/auth");
     return null;
   }
 
@@ -95,7 +102,10 @@ export default function DashboardPage() {
       <DashboardHeader />
 
       <Container maxWidth="lg" className="py-8">
-        <Paper elevation={0} className="bg-gradient-to-r from-pink-600 to-amber-500 text-white p-6 rounded-lg mb-8">
+        <Paper
+          elevation={0}
+          className="bg-gradient-to-r from-pink-600 to-amber-500 text-white p-6 rounded-lg mb-8"
+        >
           <Box className="flex items-center justify-between">
             <Box>
               <div className="text-sm mb-2">2026文化フェスティバル</div>
@@ -114,7 +124,10 @@ export default function DashboardPage() {
 
         <Card className="mb-8 shadow-sm overflow-hidden">
           <Box className="bg-pink-600 py-3 px-6">
-            <Typography variant="h6" className="font-semibold text-white flex items-center">
+            <Typography
+              variant="h6"
+              className="font-semibold text-white flex items-center"
+            >
               <Collections className="mr-2" />
               スタンプコレクション
             </Typography>
@@ -130,8 +143,8 @@ export default function DashboardPage() {
                         className="relative w-32 h-32 mb-3 rounded-full overflow-hidden shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
                         sx={{
                           background: isCollected
-                            ? 'rgba(249, 22, 203, 0.05)'
-                            : 'rgba(229, 231, 235, 0.1)',
+                            ? "rgba(249, 22, 203, 0.05)"
+                            : "rgba(229, 231, 235, 0.1)",
                         }}
                       >
                         <Image
@@ -143,6 +156,7 @@ export default function DashboardPage() {
                           }
                           width={128}
                           height={128}
+                          priority
                         />
                       </Box>
                       <Typography
@@ -158,7 +172,9 @@ export default function DashboardPage() {
                       <Typography
                         variant="caption"
                         className={`text-center mt-1 px-3 py-1 rounded-full ${
-                          isCollected ? 'bg-pink-100 text--800' : 'bg-gray-100 text-gray-500'
+                          isCollected
+                            ? "bg-pink-100 text--800"
+                            : "bg-gray-100 text-gray-500"
                         }`}
                       >
                         {isCollected ? "収集済み" : "未収集"}
