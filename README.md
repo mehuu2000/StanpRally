@@ -147,6 +147,22 @@ or
 git switch develop
 ```
 
+#### 作成したものをmainブランチにマージしたい場合
+
+GitHubを開き、Pull requestsに移動
+
+New pull requestをクリック
+
+base: main <- compare: feature/〇〇 # マージしたいブランチ名 base repositoryがmehuu...になっていないか確認
+
+create pull request
+
+他の人にレビューしてもらう
+
+レビューが通ったらMerge pull requestをクリック
+
+マージ完了！
+
 #### もしmainやdevelopで開発しちゃった！といった時は
 
 ```sh

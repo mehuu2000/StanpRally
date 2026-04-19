@@ -51,7 +51,7 @@ export default function TopPage() {
                             fontSize: { xs: '2.5rem', md: '3.5rem' }
                         }}
                     >
-                        文化フェスティバル 2025
+                        文化フェスティバル 2026
                     </Typography>
                 </Box>
 
@@ -168,7 +168,7 @@ export default function TopPage() {
                 {/* フッター */}
                 <Box sx={{ textAlign: 'center', mt: 6, mb: 3, color: '#666' }}>
                     <Typography variant="body2">
-                        文化フェスティバル2025 運営
+                        文化フェスティバル2026 運営
                     </Typography>
                     <Typography variant="body2" sx={{ mt: 1 }}>
                         スタンプラリー開発チーム
