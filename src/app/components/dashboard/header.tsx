@@ -28,14 +28,14 @@ export default function DashboardHeader() {
       position="static"
       className="shadow-sm"
       sx={{
-        backgroundColor: '#ffedd5',
-        color: '#9a3412'
+        backgroundColor: '#fef9fb',
+        color: '#ec3b83'
       }}
     >
       <Toolbar className="justify-between">
         <Box className="flex items-center justify-between w-full">
           <Box className="flex items-center">
-            <Avatar className="bg-orange-500 w-8 h-8 mr-3">
+            <Avatar className="bg-pink-500 w-8 h-8 mr-3">
               {userInitial}
             </Avatar>
             <Typography className="text-gray-700 font-medium">
