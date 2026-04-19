@@ -25,7 +25,7 @@ export default function AuthPage() {
         <Container maxWidth="sm" className="py-12">
             <Paper elevation={3} className="p-8 rounded-lg">
                 <Box className="flex flex-col items-center mb-6">
-                    <Typography variant="h5" component="h1" className="text-center mb-2 font-bold text-orange-600">
+                    <Typography variant="h5" component="h1" className="text-center mb-2 font-bold text-pink-600">
                         {authType === 'login' ? 'デジタルスタンプラリー' : '新規登録'}
                     </Typography>
                 </Box>

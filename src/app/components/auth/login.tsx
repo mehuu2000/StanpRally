@@ -3,7 +3,7 @@
 import React from 'react'
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { TextField, Button, InputAdornment, IconButton, Alert, Box, CircularProgress } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
@@ -22,7 +22,8 @@ function LoginComponent({ form, handleChange }: LoginProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const router = useRouter();
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -34,12 +35,12 @@ function LoginComponent({ form, handleChange }: LoginProps) {
                 email: form.email,
                 password: form.password,
                 redirect: false,
+                callbackUrl,
             });
-            
+
             if (response?.ok) {
                 console.log('ログイン成功:', response);
-                router.push('/dashboard'); // リダイレクト先を/dashboardに変更
-                router.refresh(); // セッション状態を更新
+                window.location.replace(response.url ?? callbackUrl);
             } else {
                 setError('メールアドレスまたはパスワードが正しくありません');
             }
@@ -58,7 +59,7 @@ function LoginComponent({ form, handleChange }: LoginProps) {
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             {error && <Alert severity="error" className="mb-4">{error}</Alert>}
-            
+
             <TextField
                 fullWidth
                 required
@@ -71,7 +72,7 @@ function LoginComponent({ form, handleChange }: LoginProps) {
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
-                            <EmailIcon className="text-orange-400" />
+                            <EmailIcon className="text-pink-400" />
                         </InputAdornment>
                     ),
                 }}
@@ -79,15 +80,15 @@ function LoginComponent({ form, handleChange }: LoginProps) {
                 sx={{
                     '& .MuiOutlinedInput-root': {
                         '&.Mui-focused fieldset': {
-                            borderColor: '#f97316',
+                            borderColor: '#ff1493',
                         },
                     },
                     '& .MuiInputLabel-root.Mui-focused': {
-                        color: '#f97316',
+                        color: '#ff1493',
                     },
                 }}
             />
-            
+
             <TextField
                 fullWidth
                 required
@@ -100,7 +101,7 @@ function LoginComponent({ form, handleChange }: LoginProps) {
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
-                            <LockIcon className="text-orange-400" />
+                            <LockIcon className="text-pink-400" />
                         </InputAdornment>
                     ),
                     endAdornment: (
@@ -108,7 +109,7 @@ function LoginComponent({ form, handleChange }: LoginProps) {
                             <IconButton
                                 onClick={handleClickShowPassword}
                                 edge="end"
-                                className="text-gray-500 hover:text-orange-500"
+                                className="text-gray-500 hover:text-pink-500"
                             >
                                 {showPassword ? <VisibilityOff /> : <Visibility />}
                             </IconButton>
@@ -119,26 +120,26 @@ function LoginComponent({ form, handleChange }: LoginProps) {
                 sx={{
                     '& .MuiOutlinedInput-root': {
                         '&.Mui-focused fieldset': {
-                            borderColor: '#f97316',
+                            borderColor: '#ff1493',
                         },
                     },
                     '& .MuiInputLabel-root.Mui-focused': {
-                        color: '#f97316',
+                        color: '#ff1493',
                     },
                 }}
             />
-            
+
             <Box className="pt-2">
                 <Button
                     type="submit"
                     fullWidth
                     variant="contained"
                     disabled={isLoading}
-                    className="bg-orange-500 hover:bg-orange-600 py-3 normal-case text-base font-medium"
+                    className="bg-pink-500 hover:bg-pink-600 py-3 normal-case text-base font-medium"
                     sx={{
-                        backgroundColor: '#f97316',
+                        backgroundColor: '#ff1493',
                         '&:hover': {
-                            backgroundColor: '#ea580c',
+                            backgroundColor: '#ed6ea0',
                         },
                     }}
                 >

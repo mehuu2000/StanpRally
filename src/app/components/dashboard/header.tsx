@@ -1,12 +1,11 @@
 'use client';
 
-import React from 'react';
 import { useSession, signOut } from 'next-auth/react';
-import { 
-  AppBar, 
-  Toolbar, 
-  Typography, 
-  Avatar, 
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Avatar,
   Box,
   Button
 } from '@mui/material';
@@ -20,23 +19,23 @@ export default function DashboardHeader() {
 
   // ユーザー名を取得（存在する場合）
   const userName = session?.user?.name || 'ゲスト';
-  
+
   // ユーザーのイニシャルを取得（アバター表示用）
   const userInitial = userName.charAt(0).toUpperCase();
 
   return (
-    <AppBar 
-      position="static" 
+    <AppBar
+      position="static"
       className="shadow-sm"
-      sx={{ 
-        backgroundColor: '#ffedd5',
-        color: '#9a3412'
+      sx={{
+        backgroundColor: '#fef9fb',
+        color: '#ec3b83'
       }}
     >
       <Toolbar className="justify-between">
         <Box className="flex items-center justify-between w-full">
           <Box className="flex items-center">
-            <Avatar className="bg-orange-500 w-8 h-8 mr-3">
+            <Avatar className="bg-pink-500 w-8 h-8 mr-3">
               {userInitial}
             </Avatar>
             <Typography className="text-gray-700 font-medium">

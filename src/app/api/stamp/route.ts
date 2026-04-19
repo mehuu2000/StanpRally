@@ -4,6 +4,9 @@ import { NextResponse } from "next/server"
 import client from "@/app/lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/lib/nextAuth"
+import { z } from "zod"
+
+export const dynamic = 'force-dynamic'
 
 const R = 6371e3 // 地球半径（メートル）
 
@@ -14,53 +17,81 @@ function getDistance(lat1: number, lng1: number, lat2: number, lng2: number): nu
     const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
-
+const startDate = new Date('2025-04-23T09:00:00+09:00');
+const endDate = new Date('2025-04-24T18:00:00+09:00'); 
 // スタンプ地点情報（仮データ）
-const stampPoints: Record<number, { lat: number, lng: number, password: number}> = {
-    1: { lat: 34.822444, lng: 135.522843 , password: 1},
-    2: { lat: 34.822900, lng: 135.523000 , password: 2},
-    3: { lat: 34.823100, lng: 135.522500 , password: 3},
-    4: { lat: 34.823300, lng: 135.522200 , password: 4},
-    5: { lat: 34.823500, lng: 135.521900 , password: 5}
+const stampPoints: Record<number, { lat: number, lng: number, password: string|undefined,availableAt: Date, expiredAt: Date,}> = {
+    1: { lat: 34.77499379168766, lng: 135.51212397901585 , password: process.env.QR_Password1, expiredAt: endDate, availableAt: startDate},
+    2: { lat: 34.77435822763561, lng: 135.51176280359462, password: process.env.QR_Password2, expiredAt: endDate, availableAt: startDate},
+    3: { lat: 34.774364081650134, lng: 135.51110844565466 , password: process.env.QR_Password3, expiredAt: endDate, availableAt: startDate},
+    4: { lat: 34.77482176055961, lng: 135.51125279706034 , password: process.env.QR_Password4, expiredAt: endDate, availableAt: startDate},
+    5: { lat: 34.77435822763561, lng: 135.51176280359462, password: process.env.QR_Password5, expiredAt: endDate, availableAt: startDate}
 }
 
-//フロントから取得する情報　lat,lng,stampId,password,frontPublicId ※lat,lngはnullでもよい
+//フロントから取得する情報　lat,lng,stampId,password ※lat,lngは0でもよい
+
 export async function GET() {
+    try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session || !session.user?.publicId) {
         return NextResponse.json({ message: "Unauthorized", status: 401 })
     }
     const publicId = session.user.publicId
 
-    const user = await client.user.findUnique({
+    let user = await client.user.findUnique({
         where: { publicId },
         include: { stamps: true }
     })
     if(!user) {
-        return NextResponse.json({ message: "User not found", status: 400 })
+        return NextResponse.json({ data: null,message: "User not found", status: 400 })
     }
-    if (!user.stamps) {
-        // スタンプレコードがない場合は作成
-        await client.stamps.create({ data: { userId: user.id } })
+    try {
+        if (!user.stamps) {
+            // スタンプレコードがない場合は作成
+            await client.stamps.create({ data: { userId: user.id } })
+            user = await client.user.findUnique({
+                where: { publicId },
+                include: { stamps: true }
+            })
+        }
+    }catch{
+        return NextResponse.json({ message: "Stamps recreate missing", status: 500 })
     }
     return NextResponse.json({ data: user, status: 200 })
+    }catch {
+        return NextResponse.json({ message: "Unexpected server error" },{ status: 500 })
+    }
 }
 
 export async function POST(req: Request) {
     try {
-        const { lat, lng, stampId,password,frontPublicId } = await req.json()
-        
+        const stampSchema = z.object({
+            lat: z.number().optional(),
+            lng: z.number().optional(),
+            stampId: z.number(),
+            password: z.string(),
+            // frontPublicId: z.string()
+        })
+
+        const body = stampSchema.parse(await req.json())
+        // const { lat, lng, stampId, password, frontPublicId } = body
+        const { lat, lng, stampId, password } = body
+
         const session = await getServerSession(authOptions)
         
         if (!session || !session.user?.publicId) {
             return NextResponse.json({ message: "Unauthorized", status: 401 })
         }
         const publicId = session.user.publicId
-        if(publicId!=frontPublicId){
-            return NextResponse.json({ message: "Unauthorized", status: 401 })
+        // if(publicId!=frontPublicId){
+        //     return NextResponse.json({ message: "Unauthorized", status: 401 })
+        // }
+        //有効な時間かチェック
+        const now = new Date();
+        if(now <= startDate || now >= endDate){
+            return NextResponse.json({ message: "Out of time", status: 400 })
         }
-
         // 有効なstampIdかチェック
         if (![1, 2, 3, 4, 5].includes(stampId)) {
             return NextResponse.json({ message: "Invalid stampId", status: 400 })
@@ -68,8 +99,6 @@ export async function POST(req: Request) {
         if(stampPoints[stampId].password != password){
             return NextResponse.json({ message: "Missing password", status: 400 })
         }
-        
-
         // ユーザーとStampsを取得
         const user = await client.user.findUnique({
             where: { publicId },
@@ -102,8 +131,8 @@ export async function POST(req: Request) {
 
         if (typeof lat === "number" && typeof lng === "number") {
             const distance = getDistance(lat, lng, point.lat, point.lng)
-            //100は仮置き
-            if (distance <= 100) {
+            //500は仮置き
+            if (distance <= 500) {
                 updateData[innerField] = true
             } else {
                 updateData[innerField] = false
@@ -126,7 +155,16 @@ export async function POST(req: Request) {
         return NextResponse.json({ message: "Stamp collected", inner: false, status: 200 })
         }
     } catch (err) {
-        console.error(err)
-        return Response.json({ message: "Unauthorized", status: 401 })
+        if (err instanceof z.ZodError) {
+            return NextResponse.json(
+                {
+                message: "Validation error",
+                // errors: err.errors
+                },
+                { status: 400 }
+            )
+        }
+        // その他のエラー
+        return NextResponse.json({ message: "Unexpected server error" },{ status: 500 })
     }
 }
