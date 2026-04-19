@@ -17,18 +17,27 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // まだ認証状態を確認中の場合は何もしない
     if (status === 'loading') return;
+
+    const currentPathWithSearch =
+      typeof window !== 'undefined'
+        ? `${window.location.pathname}${window.location.search}`
+        : pathname;
+    const callbackUrl =
+      typeof window !== 'undefined'
+        ? new URLSearchParams(window.location.search).get('callbackUrl') || '/dashboard'
+        : '/dashboard';
     
     // 認証済みユーザーがログインページにアクセスした場合
     if (isAuthPath && session) {
-      router.replace('/dashboard');
+      router.replace(callbackUrl);
       return;
     }
     
     // 未認証ユーザーが保護ページにアクセスした場合
     if (!isAuthPath && !isPublicPath && !session) {
-      router.replace(`/auth?callbackUrl=${encodeURIComponent(pathname)}`);
+      router.replace(`/auth?callbackUrl=${encodeURIComponent(currentPathWithSearch)}`);
     }
-  }, [session, status, pathname, router, isAuthPath, isPublicPath]);
+  }, [isAuthPath, isPublicPath, pathname, router, session, status]);
   
   // 認証状態確認中はローディング表示
   if (status === 'loading' && !isPublicPath) {

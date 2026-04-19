@@ -8,7 +8,8 @@ export const runtime = 'experimental-edge';
 
 // 重要なルートのみチェックするよう最適化
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
+  const currentPathWithSearch = `${pathname}${search}`;
   
   // 静的アセット、API、画像はスキップ
   if (
@@ -35,7 +36,8 @@ export async function middleware(request: NextRequest) {
       try {
         const token = await getToken({ req: request, secret: authSecret });
         if (token) {
-          return NextResponse.redirect(new URL('/dashboard', request.url));
+          const callbackUrl = request.nextUrl.searchParams.get('callbackUrl') || '/dashboard';
+          return NextResponse.redirect(new URL(callbackUrl, request.url));
         }
       } catch {
         // トークン検証エラーは無視して次へ
@@ -54,7 +56,7 @@ export async function middleware(request: NextRequest) {
     
     if (!token) {
       const url = new URL(authPath, request.url);
-      url.searchParams.set('callbackUrl', pathname);
+      url.searchParams.set('callbackUrl', currentPathWithSearch);
       return NextResponse.redirect(url);
     }
 
