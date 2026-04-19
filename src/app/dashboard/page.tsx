@@ -52,8 +52,8 @@ export default function DashboardPage() {
   if (status === 'loading' || loading==true) {
     return (
       <Box className="flex justify-center items-center min-h-screen">
-        <CircularProgress sx={{ color: '#f97316' }} />
-        <Typography className="ml-3 text-orange-600">読み込み中...</Typography>
+        <CircularProgress sx={{ color: '#ff1493' }} />
+        <Typography className="ml-3 text--600">読み込み中...</Typography>
       </Box>
     );
   }
@@ -74,11 +74,11 @@ export default function DashboardPage() {
   const stampKeys: StampKeys[] = ['stamp1', 'stamp2', 'stamp3', 'stamp4', 'stamp5'];
   
   return (
-    <div className="min-h-screen bg-orange-50">
+    <div className="min-h-screen bg-pink-50">
       <DashboardHeader />
       
       <Container maxWidth="lg" className="py-8">
-        <Paper elevation={0} className="bg-gradient-to-r from-orange-600 to-amber-500 text-white p-6 rounded-lg mb-8">
+        <Paper elevation={0} className="bg-gradient-to-r from-pink-600 to-amber-500 text-white p-6 rounded-lg mb-8">
           <Box className="flex items-center justify-between">
             <Box>
               <div className="text-sm mb-2">
@@ -100,7 +100,7 @@ export default function DashboardPage() {
         </Paper>
 
         <Card className="mb-8 shadow-sm overflow-hidden">
-          <Box className="bg-orange-600 py-3 px-6">
+          <Box className="bg-pink-600 py-3 px-6">
             <Typography variant="h6" className="font-semibold text-white flex items-center">
               <Collections className="mr-2" />
               スタンプコレクション
@@ -117,7 +117,7 @@ export default function DashboardPage() {
                         className="relative w-32 h-32 mb-3 rounded-full overflow-hidden shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
                         sx={{
                           background: isCollected
-                            ? 'rgba(249, 115, 22, 0.05)'
+                            ? 'rgba(249, 22, 203, 0.05)'
                             : 'rgba(229, 231, 235, 0.1)',
                         }}
                       >
@@ -134,7 +134,7 @@ export default function DashboardPage() {
                       <Typography
                         variant="caption"
                         className={`text-center mt-1 px-3 py-1 rounded-full ${
-                          isCollected ? 'bg-orange-100 text-orange-800' : 'bg-gray-100 text-gray-500'
+                          isCollected ? 'bg-pink-100 text--800' : 'bg-gray-100 text-gray-500'
                         }`}
                       >
                         {isCollected ? '収集済み' : '未収集'}

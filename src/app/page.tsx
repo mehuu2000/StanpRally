@@ -29,7 +29,7 @@ export default function TopPage() {
     return (
         <div className={styles.topContainer} style={{ 
             minHeight: '100vh', 
-            background: 'linear-gradient(135deg, #fff8f0 0%, #ffe8cc 100%)',
+            background: 'linear-gradient(135deg, #fdede4 0%, #fef9fb 100%)',
             padding: '2rem 0'
         }}>
             <Container maxWidth="md">
@@ -46,7 +46,7 @@ export default function TopPage() {
                         component="h1" 
                         sx={{ 
                             fontWeight: 'bold', 
-                            color: '#FF7A00',
+                            color: '#FF1493',
                             mb: 2,
                             fontSize: { xs: '2.5rem', md: '3.5rem' }
                         }}
@@ -63,7 +63,7 @@ export default function TopPage() {
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        backgroundColor: '#FF7A00',
+                        backgroundColor: '#FF1493',
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center'
@@ -79,9 +79,9 @@ export default function TopPage() {
                     p: { xs: 3, md: 4 }, 
                     mb: 5, 
                     borderRadius: '12px',
-                    border: '2px solid #FFD8B1'
+                    border: '2px solid #FFC0CB'
                 }}>
-                    <Typography variant="h5" sx={{ color: '#FF7A00', fontWeight: 'bold', mb: 2 }}>
+                    <Typography variant="h5" sx={{ color: '#FF1493', fontWeight: 'bold', mb: 2 }}>
                         スタンプラリーで文化祭をもっと楽しもう！
                     </Typography>
                     <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.7 }}>
@@ -107,16 +107,16 @@ export default function TopPage() {
                         startIcon={<LoginIcon />}
                         onClick={() => router.push('/auth')}
                         sx={{
-                            backgroundColor: '#FF7A00',
+                            backgroundColor: '#FF1493',
                             color: 'white',
                             py: 1.5,
                             px: 4,
                             fontSize: '1.1rem',
                             '&:hover': {
-                                backgroundColor: '#E86800',
+                                backgroundColor: '#ED6EA0',  //ログイン/登録ボタン選択した時のカラー（チェリーピンク）
                             },
                             borderRadius: '8px',
-                            boxShadow: '0 4px 10px rgba(255, 122, 0, 0.3)'
+                            boxShadow: '0 4px 10px rgba(255, 0, 187, 0.3)'
                         }}
                     >
                         ログイン / 登録
@@ -126,14 +126,14 @@ export default function TopPage() {
                         startIcon={<DownloadIcon />}
                         onClick={handleDownloadPamphlet}
                         sx={{
-                            color: '#FF7A00',
-                            borderColor: '#FF7A00',
+                            color: '#FF1493',
+                            borderColor: '#FF1493',
                             py: 1.5,
                             px: 4,
                             fontSize: '1.1rem',
                             '&:hover': {
-                                borderColor: '#E86800',
-                                backgroundColor: 'rgba(255, 122, 0, 0.04)',
+                                borderColor: '#ED6EA0',  //パンフレットボタン選択した時のカラー（チェリーピンク）
+                                backgroundColor: 'rgba(255, 0, 187, 0.2)',
                             },
                             borderRadius: '8px'
                         }}
@@ -147,12 +147,12 @@ export default function TopPage() {
                     p: 3, 
                     mb: 4, 
                     borderRadius: '12px',
-                    backgroundColor: '#FFF7F0',
-                    border: '1px solid #FFD8B1'
+                    backgroundColor: '#FEF9FB',  //参加特典背景（ピンクホワイト）
+                    border: '1px solid #FFC0CB'  //ボーダー（ピンク）
                 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <EmojiEventsIcon sx={{ color: '#FFB347', mr: 1, fontSize: '2rem' }} />
-                        <Typography variant="h5" sx={{ color: '#FF7A00', fontWeight: 'bold' }}>
+                        <EmojiEventsIcon sx={{ color: '#FF1493', mr: 1, fontSize: '2rem' }} />
+                        <Typography variant="h5" sx={{ color: '#FF1493', fontWeight: 'bold' }}>
                             参加特典
                         </Typography>
                     </Box>
