@@ -49,12 +49,20 @@ export async function GET() {
 
         // ユーザーをシャッフル
         const shuffledUsers = [...weightedList].sort(() => 0.5 - Math.random())
-        const winners = shuffledUsers.slice(0, gifts.length)
+        const selectedWinners: typeof users = []
+        for (const user of shuffledUsers) {
+            if (selectedWinners.find(w => w.user.id === user.user.id)) {
+                continue // すでに当選してるならスキップ
+            }
+            selectedWinners.push(user)
+            if (selectedWinners.length === gifts.length) break
+        }
 
         // ギフトもシャッフル
         const shuffledGifts = [...gifts].sort(() => 0.5 - Math.random())
 
-        const result = winners.map((entry, index) => ({
+        const result = selectedWinners.map((entry, index) => ({
+            name: entry.user.name,
             userId: entry.user.id,
             email: entry.user.email,
             gift: shuffledGifts[index],
